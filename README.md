@@ -17,6 +17,45 @@ A full-stack web application for managing car rentals with role-based access, re
 
 ---
 
+## 📸 Screenshots
+
+### 🏠 Customer Portal
+
+#### Homepage
+![Homepage](screenshots/01_homepage.png)
+
+<details>
+<summary><b>🔍 View More Customer Pages (Car Listings, Booking, Dashboard)</b></summary>
+<br>
+
+#### Car Listings & Search
+![Car Listings](screenshots/02_car_listings.png)
+
+#### Car Details & Booking
+![Car Details](screenshots/03_car_details.png)
+
+#### User Dashboard
+![User Dashboard](screenshots/04_user_dashboard.png)
+</details>
+
+### 🔧 Admin Dashboard
+
+#### Revenue & Bookings Analytics
+![Admin Dashboard](screenshots/05_admin_dashboard.png)
+
+<details>
+<summary><b>⚙️ View More Admin Pages (Manage Cars, Manage Bookings)</b></summary>
+<br>
+
+#### Manage Cars
+![Manage Cars](screenshots/06_admin_manage_cars.png)
+
+#### Manage Bookings & Users
+![Manage Bookings](screenshots/07_admin_manage_bookings.png)
+</details>
+
+---
+
 ## 🎯 Key Features
 
 ### 👤 Customer Portal
