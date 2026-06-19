@@ -1,207 +1,138 @@
-# DriveEase Car Rental System
+# 🚗 DriveEase — Car Rental Management System
 
-**Final Year Project** | B.Sc. Computer Science
-**Developed by:** Vedant Rajendra Bolke & Vishal Rajendra Hapse
-**College:** Shri Dnyaneshwar Mahavidyalaya, Newasa
-**Academic Year:** 2025–2026
-**Guide:** Prof. Jagtap S. G
+A full-stack web application for managing car rentals with role-based access, real-time booking management, and an analytics dashboard. Built with **Django**, **MySQL**, and **Bootstrap 5**.
+
+> Built by [Vedant Bolke](https://github.com/vedantbolke-dev) & Vishal Hapse
 
 ---
 
-## Technology Stack
+## ⚡ Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Backend | Python 3.x, Django 4.2 |
-| Frontend | HTML5, CSS3, Bootstrap 5, JavaScript |
-| Database | MySQL |
-| Charts | Chart.js |
-| Icons | Bootstrap Icons |
-| Config | python-decouple (.env) |
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-5.2-092E20?style=for-the-badge&logo=django&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Chart.js](https://img.shields.io/badge/Chart.js-Analytics-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
 ---
 
-## Project Structure
+## 🎯 Key Features
+
+### 👤 Customer Portal
+- **User Authentication** — Register, login, logout with Django's auth system
+- **Smart Car Search** — Filter by category, price range, fuel type & transmission
+- **Booking System** — Date-based booking with automatic cost calculation
+- **Double-Booking Prevention** — Date overlap validation ensures no conflicts
+- **Booking Lifecycle** — Track status (Pending → Confirmed → Completed / Cancelled)
+- **Profile Management** — Update personal details, upload driving license
+
+### 🔧 Admin Dashboard
+- **Revenue Analytics** — Chart.js powered graphs (last 6 months revenue, bookings trend)
+- **Car Management** — Full CRUD with image upload & featured car selection
+- **Booking Control** — Approve, reject, or complete bookings with admin notes
+- **User Management** — Block/unblock users, view user activity
+- **Popular Cars Insights** — Data-driven insights on most booked vehicles
+
+---
+
+## 🏗️ Architecture
 
 ```
-driveease/               ← project root (run manage.py from here)
-├── manage.py
-├── .env.example         ← copy to .env and fill in credentials
-├── requirements.txt
-├── README.md
-├── driveease/           ← Django settings package
-│   ├── settings.py
-│   ├── urls.py
-│   ├── wsgi.py
-│   └── asgi.py
-├── apps/                ← all application code lives here
-│   ├── users/           ← custom user model, auth, profile
-│   ├── cars/            ← car listings, search, seed data
-│   ├── bookings/        ← booking creation, cancellation
-│   └── dashboard/       ← admin analytics dashboard
-├── templates/           ← HTML templates
-├── static/              ← CSS, JS, images
-└── media/               ← user-uploaded files
+driveease/
+├── driveease/              # Django project settings & URL routing
+│   ├── settings.py         # Database, auth, static/media config
+│   └── urls.py             # Root URL configuration
+├── apps/
+│   ├── users/              # Custom user model, auth views, profile
+│   ├── cars/               # Car model, listings, search & filters
+│   ├── bookings/           # Booking model, date validation, invoices
+│   └── dashboard/          # Admin analytics, reports, user management
+├── templates/              # 25+ Django templates with template inheritance
+├── static/                 # CSS, JavaScript, images
+└── docs/report-diagrams/   # UML diagrams (Class, ER, Sequence, DFD, Use Case)
 ```
 
----
-
-## Project Setup Instructions
-
-### Step 1: Prerequisites
-
-Make sure you have installed:
-- Python 3.10 or higher
-- MySQL Server (XAMPP or standalone)
-- pip (Python package manager)
+### Design Decisions
+- **Custom User Model** — Extended Django's `AbstractUser` with phone, address, driving license & profile picture fields
+- **App-based architecture** — Separated into 4 Django apps for clean separation of concerns
+- **Environment-based config** — `python-decouple` for secrets management (no hardcoded credentials)
+- **Template inheritance** — Base template with consistent navbar, footer & responsive layout across all pages
+- **Management commands** — Custom `seed_data` command to populate demo data
 
 ---
 
-### Step 2: Extract the Project
+## 🗄️ Database Design
+
+Three core models with foreign key relationships:
+
+| Model | Key Fields | Relationships |
+|-------|-----------|---------------|
+| **CustomUser** | username, email, phone, address, driving_license, is_blocked | — |
+| **Car** | name, brand, category, fuel_type, transmission, price_per_day, is_featured | — |
+| **Booking** | pickup_date, return_date, total_cost, status, special_requests | FK → User, FK → Car |
+
+> Full ER diagram, class diagram, DFD, and sequence diagrams available in [`docs/report-diagrams/`](docs/report-diagrams/)
+
+---
+
+## 🚀 Quick Start
 
 ```bash
+# Clone the repo
+git clone https://github.com/vedantbolke-dev/driveease.git
 cd driveease
-```
 
----
-
-### Step 3: Create Virtual Environment
-
-```bash
-# Windows
+# Create virtual environment & install dependencies
 python -m venv venv
-venv\Scripts\activate
-
-# Mac / Linux
-python3 -m venv venv
-source venv/bin/activate
-```
-
----
-
-### Step 4: Install Requirements
-
-```bash
+venv\Scripts\activate        # Windows
 pip install -r requirements.txt
-```
 
-> **Windows note:** If `mysqlclient` fails to build, either:
-> - Install [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/), OR
-> - Replace `mysqlclient` with `PyMySQL` in requirements.txt and add to settings.py:
->   ```python
->   import pymysql; pymysql.install_as_MySQLdb()
->   ```
+# Configure environment
+copy .env.example .env       # Edit .env with your MySQL credentials
 
----
-
-### Step 5: Configure Environment Variables
-
-```bash
-# Windows
-copy .env.example .env
-
-# Mac/Linux
-cp .env.example .env
-```
-
-Edit `.env` and set your MySQL password:
-```
-DB_NAME=driveease_db
-DB_USER=root
-DB_PASSWORD=root
-DB_HOST=localhost
-DB_PORT=3306
-```
-
----
-
-### Step 6: Create MySQL Database
-
-Open MySQL / phpMyAdmin and run:
-```sql
-CREATE DATABASE driveease_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
----
-
-### Step 7: Run Django Migrations
-
-```bash
-python manage.py makemigrations users cars bookings
+# Setup database
+# Create 'driveease_db' in MySQL, then:
 python manage.py migrate
+python manage.py seed_data   # Creates 9 sample cars + admin account
+
+# Run
+python manage.py runserver   # Visit http://127.0.0.1:8000
 ```
 
 ---
 
-### Step 8: Seed Sample Data
+## 📄 Pages & Routes
 
-```bash
-python manage.py seed_data
-```
-
-This creates:
-- ✅ 9 sample cars (all categories)
-- ✅ Admin user: `admin` / `Admin@1234`
-
----
-
-### Step 9: Run the Development Server
-
-```bash
-python manage.py runserver
-```
-
-Open in browser: **http://127.0.0.1:8000**
+| Page | Route | Access |
+|------|-------|--------|
+| Home (Featured Cars) | `/` | Public |
+| Car Listings | `/cars/` | Public |
+| Car Details | `/cars/<id>/` | Public |
+| Book a Car | `/bookings/create/<id>/` | Logged-in Users |
+| User Dashboard | `/users/dashboard/` | Logged-in Users |
+| Admin Dashboard | `/dashboard/` | Admin Only |
+| Admin — Manage Cars | `/dashboard/cars/` | Admin Only |
+| Admin — Manage Bookings | `/dashboard/bookings/` | Admin Only |
+| Admin — Manage Users | `/dashboard/users/` | Admin Only |
 
 ---
 
-## Admin Access
+## 📋 What I Learned
 
-After running `python manage.py seed_data`, an admin account is created automatically.
-Use the admin dashboard at `/dashboard/` or Django admin at `/admin/`.
-
----
-
-## Project Pages
-
-| Page | URL |
-|------|-----|
-| Home | / |
-| Car Listing | /cars/ |
-| Car Detail | /cars/\<id\>/ |
-| Register | /users/register/ |
-| Login | /users/login/ |
-| User Dashboard | /users/dashboard/ |
-| Admin Dashboard | /dashboard/ |
-| About Us | /about/ |
-| Contact | /contact/ |
+- Building a full-stack web app from scratch with Django's MVT architecture
+- Designing and normalizing a relational database schema
+- Implementing role-based access control (user vs admin)
+- Creating reusable Django template components with inheritance
+- Building interactive dashboards with Chart.js
+- Managing environment variables and secrets securely
+- Writing custom Django management commands for data seeding
+- Form validation, CSRF protection, and secure file uploads
 
 ---
 
-## Features
+## 📝 License
 
-### User Features
-- Register, Login, Logout
-- Browse cars with filters (category, price, fuel type, transmission)
-- View full car details and specifications
-- Book a car (pick & return date with auto cost calculation)
-- Booking date-overlap prevention (no double-booking)
-- Booking status tracking
-- Cancel pending/confirmed bookings
-- Profile management with driving license field
+This project was developed as a final year academic project (B.Sc. Computer Science, 2025–2026).
 
-### Admin Features
-- Analytics dashboard with Chart.js (revenue, bookings, popular cars)
-- Add / Edit / Delete cars with image upload
-- Mark cars as featured (shown on homepage)
-- Manage booking status (Approve / Reject / Complete)
-- Block / Unblock / Delete users
-- Revenue analytics (last 6 months)
-
----
-
-## Copyright
-
-© 2026 DriveEase Car Rental System. All rights reserved.
-Developed by Vedant Rajendra Bolke & Vishal Rajendra Hapse
-B.Sc. Computer Science | Shri Dnyaneshwar Mahavidyalaya, Newasa
+© 2026 Vedant Bolke & Vishal Hapse
