@@ -115,7 +115,11 @@ Three core models with foreign key relationships:
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Setup & Deployment
+
+### 💻 Local Development Setup
+
+To run DriveEase locally:
 
 ```bash
 # Clone the repo
@@ -125,19 +129,26 @@ cd driveease
 # Create virtual environment & install dependencies
 python -m venv venv
 venv\Scripts\activate        # Windows
+# source venv/bin/activate   # macOS/Linux
 pip install -r requirements.txt
 
 # Configure environment
-copy .env.example .env       # Edit .env with your MySQL credentials
+copy .env.example .env       # Windows (or use 'cp' on macOS/Linux)
+# Open .env and set your MySQL username and password
 
-# Setup database
-# Create 'driveease_db' in MySQL, then:
+# Setup database (Create database 'driveease_db' in MySQL first)
 python manage.py migrate
-python manage.py seed_data   # Creates 9 sample cars + admin account
+python manage.py seed_data   # Creates 9 sample cars + admin account (admin / admin123)
 
-# Run
+# Run development server
 python manage.py runserver   # Visit http://127.0.0.1:8000
 ```
+
+### 🌐 Live Production Deployment
+
+To host this application live on the web using a free tier server (e.g., PythonAnywhere), refer to the detailed step-by-step guide:
+
+👉 **[PythonAnywhere Deployment Guide](DEPLOYMENT.md)**
 
 ---
 
