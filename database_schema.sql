@@ -1,7 +1,7 @@
 -- ============================================================
 -- DriveEase Car Rental System - MySQL Database Schema
 -- Project: DriveEase Car Rental System
--- Developed by: Vedant Rajendra Bolke & Vishal Rajendra Hapse
+-- Developed by: Vedant Rajendra Bolke
 -- College: Shri Dnyaneshwar Mahavidyalaya, Newasa
 -- Academic Year: 2025-2026
 -- ============================================================

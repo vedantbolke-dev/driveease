@@ -2,7 +2,7 @@
 
 A full-stack web application for managing car rentals with role-based access, real-time booking management, and an analytics dashboard. Built with **Django**, **MySQL**, and **Bootstrap 5**.
 
-> Built by [Vedant Bolke](https://github.com/vedantbolke-dev) & Vishal Hapse
+> Built by [Vedant Bolke](https://github.com/vedantbolke-dev)
 
 ---
 
@@ -135,4 +135,4 @@ python manage.py runserver   # Visit http://127.0.0.1:8000
 
 This project was developed as a final year academic project (B.Sc. Computer Science, 2025–2026).
 
-© 2026 Vedant Bolke & Vishal Hapse
+© 2026 Vedant Bolke

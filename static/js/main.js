@@ -1,6 +1,6 @@
 /*
  * DriveEase Car Rental System - Main JavaScript
- * Developed by: Vedant Rajendra Bolke & Vishal Rajendra Hapse
+ * Developed by: Vedant Rajendra Bolke
  * B.Sc. Computer Science | Shri Dnyaneshwar Mahavidyalaya, Newasa
  */
 
