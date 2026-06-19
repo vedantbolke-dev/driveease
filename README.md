@@ -155,14 +155,10 @@ Open in browser: **http://127.0.0.1:8000**
 
 ---
 
-## Admin Credentials
+## Admin Access
 
-| Field | Value |
-|-------|-------|
-| URL | http://127.0.0.1:8000/dashboard/ |
-| Username | admin |
-| Password | Admin@1234 |
-| Django Admin | http://127.0.0.1:8000/admin/ |
+After running `python manage.py seed_data`, an admin account is created automatically.
+Use the admin dashboard at `/dashboard/` or Django admin at `/admin/`.
 
 ---
 
