@@ -1,0 +1,46 @@
+flowchart LR
+    Customer[Customer]
+    Admin[Admin]
+
+    subgraph System[DriveEase Car Rental System]
+        UC1((Register))
+        UC2((Login))
+        UC3((Manage Profile))
+        UC4((Browse Cars))
+        UC5((View Car Details))
+        UC6((Book Car))
+        UC7((View Booking))
+        UC8((Cancel Booking))
+        UC9((Download Invoice))
+        UC10((Submit Review))
+        UC11((Send Contact Message))
+
+        UA1((Access Admin Dashboard))
+        UA2((Manage Cars))
+        UA3((Manage Bookings))
+        UA4((Manage Users))
+        UA5((View Reports))
+        UA6((Export Reports))
+        UA7((Manage Contact Messages))
+    end
+
+    Customer --> UC1
+    Customer --> UC2
+    Customer --> UC3
+    Customer --> UC4
+    Customer --> UC5
+    Customer --> UC6
+    Customer --> UC7
+    Customer --> UC8
+    Customer --> UC9
+    Customer --> UC10
+    Customer --> UC11
+
+    Admin --> UC2
+    Admin --> UA1
+    Admin --> UA2
+    Admin --> UA3
+    Admin --> UA4
+    Admin --> UA5
+    Admin --> UA6
+    Admin --> UA7

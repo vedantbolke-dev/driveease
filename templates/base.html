@@ -1,0 +1,288 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DriveEase Car Rental System - Affordable Car Rentals in Newasa, Maharashtra">
+    <title>{% block title %}DriveEase Car Rental System{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}?v=20260404-2" rel="stylesheet">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ===== NAVIGATION BAR ===== -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+    <div class="container">
+        <!-- Brand Logo -->
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
+            <i class="bi bi-car-front-fill text-danger fs-4"></i>
+            <span class="fw-bold" style="color:#ffffff !important;">Drive<span class="text-danger">Ease</span></span>
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarMain" aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav Links -->
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+                       href="{% url 'home' %}">
+                        <i class="bi bi-house-fill me-1"></i>Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'cars' in request.path %}active{% endif %}"
+                       href="{% url 'cars:list' %}">
+                        <i class="bi bi-car-front me-1"></i>Our Cars
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/about/' %}active{% endif %}"
+                       href="{% url 'about' %}">
+                        <i class="bi bi-info-circle me-1"></i>About
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}"
+                       href="{% url 'contact' %}">
+                        <i class="bi bi-telephone me-1"></i>Contact
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Right side nav items -->
+            <ul class="navbar-nav ms-auto align-items-center gap-1">
+                {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard:home' %}">
+                            <i class="bi bi-speedometer2 me-1"></i>Admin Panel
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-1"
+                           href="#" data-bs-toggle="dropdown">
+                            <div class="user-avatar-nav">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <span>{{ user.first_name|default:user.username }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'users:dashboard' %}">
+                                    <i class="bi bi-grid me-2 text-danger"></i>My Dashboard
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'users:profile' %}">
+                                    <i class="bi bi-person me-2 text-danger"></i>My Profile
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{% url 'users:logout' %}">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:login' %}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-danger btn-sm px-3 ms-2" href="{% url 'users:register' %}">
+                            Register
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== TOAST NOTIFICATIONS ===== -->
+{% if messages %}
+<div id="toastContainer" style="position:fixed; top:80px; right:20px; z-index:9999; display:flex; flex-direction:column; gap:12px; max-width:360px;">
+    {% for msg in messages %}
+    <div class="driveease-toast"
+         data-tags="{{ msg.tags }}"
+         style="background:#1a1a1a; border-radius:12px; padding:16px 18px;
+                box-shadow:0 8px 32px rgba(0,0,0,0.35);
+                display:flex; align-items:flex-start; gap:14px;
+                animation:slideInRight 0.35s ease; color:white;
+                border-left:4px solid #0dcaf0;">
+        <i class="toast-icon bi bi-info-circle-fill" style="font-size:1.3rem; margin-top:2px; flex-shrink:0; color:#0dcaf0;"></i>
+        <div style="flex:1; font-size:0.9rem; line-height:1.4;">{{ msg }}</div>
+        <button onclick="this.parentElement.remove()"
+                style="background:none; border:none; color:rgba(255,255,255,0.5);
+                       font-size:1.3rem; cursor:pointer; padding:0; line-height:1; flex-shrink:0;">&times;</button>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+@keyframes slideInRight { from{opacity:0;transform:translateX(60px);}to{opacity:1;transform:translateX(0);} }
+@keyframes fadeOut      { from{opacity:1;transform:translateX(0);}to{opacity:0;transform:translateX(60px);} }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const colorMap = {
+        'success':       { border:'#28a745', icon:'bi-check-circle-fill',        color:'#28a745' },
+        'error':         { border:'#dc3545', icon:'bi-x-circle-fill',             color:'#dc3545' },
+        'alert-danger':  { border:'#dc3545', icon:'bi-x-circle-fill',             color:'#dc3545' },
+        'warning':       { border:'#ffc107', icon:'bi-exclamation-triangle-fill', color:'#ffc107' },
+        'alert-warning': { border:'#ffc107', icon:'bi-exclamation-triangle-fill', color:'#ffc107' },
+        'info':          { border:'#0dcaf0', icon:'bi-info-circle-fill',          color:'#0dcaf0' },
+    };
+
+    document.querySelectorAll('.driveease-toast').forEach(function(toast, i) {
+        const tags = toast.dataset.tags || '';
+        let style = colorMap['info'];
+        Object.keys(colorMap).forEach(function(key) {
+            if (tags.indexOf(key) !== -1) style = colorMap[key];
+        });
+        toast.style.borderLeftColor = style.border;
+        const ico = toast.querySelector('.toast-icon');
+        ico.className = 'toast-icon bi ' + style.icon;
+        ico.style.color = style.color;
+
+        // Auto dismiss after 4s
+        setTimeout(function() {
+            toast.style.animation = 'fadeOut 0.4s ease forwards';
+            setTimeout(function(){ toast.remove(); }, 400);
+        }, 4000 + (i * 500));
+    });
+});
+</script>
+{% endif %}
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="{% block main_class %}{% endblock %}">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer-main">
+    <div class="footer-top">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Brand Column -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="bi bi-car-front-fill text-danger fs-3"></i>
+                        <h5 class="mb-0 fw-bold text-white">Drive<span class="text-danger">Ease</span></h5>
+                    </div>
+                    <p style="color:#aaaaaa;" class="small">
+                        DriveEase Car Rental System provides affordable and reliable
+                        car rental services in Newasa, Maharashtra. Choose from our
+                        wide range of cars for any occasion.
+                    </p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="footer-social"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="footer-social"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="footer-social"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="footer-social"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="footer-heading">Quick Links</h6>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="{% url 'home' %}"><i class="bi bi-chevron-right me-1"></i>Home</a></li>
+                        <li><a href="{% url 'cars:list' %}"><i class="bi bi-chevron-right me-1"></i>Our Cars</a></li>
+                        <li><a href="{% url 'about' %}"><i class="bi bi-chevron-right me-1"></i>About Us</a></li>
+                        <li><a href="{% url 'contact' %}"><i class="bi bi-chevron-right me-1"></i>Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Car Categories -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="footer-heading">Categories</h6>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="{% url 'cars:list' %}?category=suv"><i class="bi bi-chevron-right me-1"></i>SUV</a></li>
+                        <li><a href="{% url 'cars:list' %}?category=sedan"><i class="bi bi-chevron-right me-1"></i>Sedan</a></li>
+                        <li><a href="{% url 'cars:list' %}?category=hatchback"><i class="bi bi-chevron-right me-1"></i>Hatchback</a></li>
+                        <li><a href="{% url 'cars:list' %}?category=luxury"><i class="bi bi-chevron-right me-1"></i>Luxury</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="footer-heading">Contact Us</h6>
+                    <ul class="list-unstyled footer-contact">
+                        <li>
+                            <i class="bi bi-geo-alt-fill text-danger"></i>
+                            <span>Newasa, Maharashtra, India</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-telephone-fill text-danger"></i>
+                            <a href="tel:+919876543210">+91 9876543210</a>
+                        </li>
+                        <li>
+                            <i class="bi bi-envelope-fill text-danger"></i>
+                            <a href="mailto:support@driveease.com">support@driveease.com</a>
+                        </li>
+                        <li>
+                            <i class="bi bi-clock-fill text-danger"></i>
+                            <span>Mon - Sat: 9:00 AM - 6:00 PM</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0 small text-muted">
+                        &copy; 2026 DriveEase Car Rental System. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                    <p class="mb-0 small text-muted">
+                        Developed by
+                        <span class="text-danger fw-medium">Vedant Rajendra Bolke</span> &amp;
+                        <span class="text-danger fw-medium">Vishal Rajendra Hapse</span>
+                        &nbsp;|&nbsp; B.Sc. CS &nbsp;|&nbsp;
+                        Shri Dnyaneshwar Mahavidyalaya, Newasa
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Custom JS -->
+<script src="{% static 'js/main.js' %}?v=20260404-2"></script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>
+

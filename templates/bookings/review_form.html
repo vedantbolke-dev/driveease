@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Review Booking #{{ booking.pk }} - DriveEase{% endblock %}
+{% block main_class %}{% endblock %}
+
+{% block extra_css %}
+<style>
+.star-radio-group { display:flex; flex-direction:row-reverse; justify-content:flex-end; gap:8px; }
+.star-radio-group input[type=radio] { display:none; }
+.star-radio-group label {
+    font-size: 2.5rem; cursor: pointer; color: #ddd; transition: color 0.15s;
+}
+.star-radio-group input[type=radio]:checked ~ label,
+.star-radio-group label:hover,
+.star-radio-group label:hover ~ label {
+    color: #ffc107;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="margin-top:70px;">
+<div class="page-header-section">
+    <div class="container">
+        <h1 class="page-header-title">Write a Review</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-danger">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'users:dashboard' %}" class="text-danger">Dashboard</a></li>
+                <li class="breadcrumb-item active">Review</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+
+            <!-- Car Summary -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body d-flex gap-3 align-items-center">
+                    {% if booking.car.image %}
+                    <img src="{{ booking.car.image.url }}" class="rounded" style="width:80px;height:60px;object-fit:cover;" alt="{{ booking.car.name }}">
+                    {% else %}
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width:80px;height:60px;">
+                        <i class="bi bi-car-front text-muted fs-3"></i>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <h6 class="fw-bold mb-0">{{ booking.car.brand }} {{ booking.car.name }}</h6>
+                        <small class="text-muted">{{ booking.pickup_date }} → {{ booking.return_date }} &bull; {{ booking.total_days }} day{{ booking.total_days|pluralize }}</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Form -->
+            <div class="booking-form-card">
+                <h5 class="fw-bold mb-4">
+                    <i class="bi bi-star-fill text-warning me-2"></i>Share Your Experience
+                </h5>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <!-- Star Rating -->
+                    <div class="mb-4">
+                        <label class="form-label fw-medium">Your Rating <span class="text-danger">*</span></label>
+                        <div class="star-radio-group" id="starGroup">
+                            {% for val, label in form.rating.field.choices %}
+                            <input type="radio" name="rating" id="star{{ val }}" value="{{ val }}"
+                                   {% if form.rating.value == val|stringformat:"s" %}checked{% endif %}>
+                            <label for="star{{ val }}" title="{{ label }}">★</label>
+                            {% endfor %}
+                        </div>
+                        <div id="ratingText" class="text-muted small mt-2"></div>
+                        {% if form.rating.errors %}
+                        <div class="text-danger small mt-1">Please select a rating.</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Comment -->
+                    <div class="mb-4">
+                        <label class="form-label fw-medium">Your Review</label>
+                        {{ form.comment }}
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-danger px-4 fw-bold">
+                            <i class="bi bi-send me-2"></i>Submit Review
+                        </button>
+                        <a href="{% url 'bookings:detail' pk=booking.pk %}" class="btn btn-outline-dark px-4">Cancel</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const labels = {1:'Poor',2:'Fair',3:'Good',4:'Very Good',5:'Excellent'};
+document.querySelectorAll('input[name="rating"]').forEach(r => {
+    r.addEventListener('change', () => {
+        document.getElementById('ratingText').textContent = labels[r.value] + ' (' + r.value + '/5)';
+    });
+});
+</script>
+{% endblock %}

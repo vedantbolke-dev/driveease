@@ -1,0 +1,34 @@
+flowchart LR
+    Browser[Web Browser]
+
+    Router[Django URL Router]
+
+    subgraph Apps[Django Apps]
+        U[Users App]
+        C[Cars App]
+        B[Bookings App]
+        D[Dashboard App]
+    end
+
+    Templates[Templates Layer]
+    Static[Static and Media Files]
+    DB[(MySQL Database)]
+
+    Browser --> Router
+    Router --> U
+    Router --> C
+    Router --> B
+    Router --> D
+
+    U --> Templates
+    C --> Templates
+    B --> Templates
+    D --> Templates
+
+    Templates --> Browser
+    Static --> Browser
+
+    U --> DB
+    C --> DB
+    B --> DB
+    D --> DB

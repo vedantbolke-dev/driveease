@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Cars - DriveEase Car Rental{% endblock %}
+{% block main_class %}{% endblock %}
+
+{% block content %}
+<div style="margin-top:70px;">
+<!-- Page Header -->
+<div class="page-header-section">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h1 class="page-header-title">Our Cars</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-danger">Home</a></li>
+                        <li class="breadcrumb-item active">Cars</li>
+                    </ol>
+                </nav>
+            </div>
+            <span class="badge bg-danger fs-6 px-3 py-2">
+                {{ total_count }} Car{{ total_count|pluralize }} Found
+                {% if date_filtered %}
+                <span class="badge bg-success ms-2" style="font-size:0.8rem;">
+                    <i class="bi bi-calendar-check me-1"></i>Available: {{ pickup_date }} → {{ return_date }}
+                </span>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+
+        <!-- Filters Sidebar -->
+        <div class="col-lg-3">
+            <div class="filter-card sticky-top" style="top:80px;">
+                <h5 class="filter-heading">
+                    <i class="bi bi-funnel-fill text-danger me-2"></i>Filter Cars
+                </h5>
+                <form method="GET" id="filterForm">
+                    <!-- Search -->
+                    <div class="mb-3">
+                        <label class="filter-label">Search</label>
+                        {{ form.query }}
+                    </div>
+
+                    <!-- Category -->
+                    <div class="mb-3">
+                        <label class="filter-label">Category</label>
+                        {{ form.category }}
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="mb-3">
+                        <label class="filter-label">Price Range (₹/day)</label>
+                        <div class="row g-2">
+                            <div class="col-6">{{ form.min_price }}</div>
+                            <div class="col-6">{{ form.max_price }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Fuel Type -->
+                    <div class="mb-3">
+                        <label class="filter-label">Fuel Type</label>
+                        {{ form.fuel_type }}
+                    </div>
+
+                    <!-- Transmission -->
+                    <div class="mb-3">
+                        <label class="filter-label">Transmission</label>
+                        {{ form.transmission }}
+                    </div>
+
+                    <button type="submit" class="btn btn-danger w-100 mb-2">
+                        <i class="bi bi-search me-1"></i>Apply Filters
+                    </button>
+                    <a href="{% url 'cars:list' %}" class="btn btn-outline-secondary w-100 btn-sm">
+                        <i class="bi bi-x-circle me-1"></i>Clear Filters
+                    </a>
+                </form>
+            </div>
+        </div>
+
+        <!-- Car Grid -->
+        <div class="col-lg-9">
+            <!-- Category Quick Tabs -->
+            <div class="category-tabs mb-4">
+                <a href="{% url 'cars:list' %}"
+                   class="cat-tab {% if not selected_category %}active{% endif %}">
+                    All
+                </a>
+                <a href="?category=hatchback"
+                   class="cat-tab {% if selected_category == 'hatchback' %}active{% endif %}">
+                    <i class="bi bi-car-front me-1"></i>Hatchback
+                </a>
+                <a href="?category=sedan"
+                   class="cat-tab {% if selected_category == 'sedan' %}active{% endif %}">
+                    <i class="bi bi-car-front-fill me-1"></i>Sedan
+                </a>
+                <a href="?category=suv"
+                   class="cat-tab {% if selected_category == 'suv' %}active{% endif %}">
+                    <i class="bi bi-truck-front-fill me-1"></i>SUV
+                </a>
+                <a href="?category=luxury"
+                   class="cat-tab {% if selected_category == 'luxury' %}active{% endif %}">
+                    <i class="bi bi-gem me-1"></i>Luxury
+                </a>
+            </div>
+
+            {% if cars %}
+            <div class="row g-4">
+                {% for car in cars %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="car-card h-100">
+                        <!-- Image -->
+                        <div class="car-card-img-wrap">
+                            {% if car.image %}
+                                <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.name }}"
+                                     class="car-card-img">
+                            {% else %}
+                                <div class="car-card-placeholder">
+                                    <i class="bi bi-car-front-fill"></i>
+                                    <span>{{ car.brand }}</span>
+                                </div>
+                            {% endif %}
+                            <div class="car-card-badge">
+                                <span class="badge bg-danger">{{ car.get_category_display }}</span>
+                            </div>
+                            {% if not car.is_available %}
+                            <div class="car-unavailable-overlay">
+                                <span>Unavailable</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Info -->
+                        <div class="car-card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="car-card-title mb-0">{{ car.brand }} {{ car.name }}</h6>
+                                    <small class="text-muted">{{ car.model_year }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="car-price">₹{{ car.price_per_day }}</span>
+                                    <small class="d-block text-muted">/day</small>
+                                </div>
+                            </div>
+
+                            <div class="car-specs">
+                                <span class="car-spec-item">
+                                    <i class="bi bi-people-fill"></i> {{ car.seating_capacity }}
+                                </span>
+                                <span class="car-spec-item">
+                                    <i class="bi bi-gear-fill"></i> {{ car.get_transmission_display }}
+                                </span>
+                                <span class="car-spec-item">
+                                    <i class="bi bi-fuel-pump"></i> {{ car.get_fuel_type_display }}
+                                </span>
+                            </div>
+
+                            <div class="car-card-actions mt-3">
+                                <a href="{% url 'cars:detail' pk=car.pk %}"
+                                   class="btn btn-outline-dark btn-sm">
+                                    <i class="bi bi-eye me-1"></i>Details
+                                </a>
+                                {% if car.is_available %}
+                                <a href="{% url 'bookings:create' car_id=car.pk %}"
+                                   class="btn btn-danger btn-sm">
+                                    <i class="bi bi-calendar-check me-1"></i>Book
+                                </a>
+                                {% else %}
+                                <button class="btn btn-secondary btn-sm" disabled>N/A</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-search text-muted" style="font-size:4rem;"></i>
+                <h4 class="mt-3 text-muted">No cars found</h4>
+                <p class="text-muted">Try adjusting your filters or search terms.</p>
+                <a href="{% url 'cars:list' %}" class="btn btn-outline-danger mt-2">
+                    <i class="bi bi-arrow-left me-1"></i>View All Cars
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

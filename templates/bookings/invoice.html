@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Invoice #{{ booking.pk }} - DriveEase{% endblock %}
+
+{% block extra_css %}
+<style>
+@media print {
+    .no-print { display: none !important; }
+    body { background: white !important; }
+    .invoice-wrapper { box-shadow: none !important; }
+}
+.invoice-wrapper { max-width: 780px; margin: 0 auto; background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden; }
+.invoice-header { background: #1a1a1a; color: white; padding: 32px 40px; }
+.invoice-header .brand { font-size: 2rem; font-weight: 800; }
+.invoice-header .brand span { color: #dc3545; }
+.invoice-body { padding: 32px 40px; }
+.invoice-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 4px; }
+.invoice-value { font-size: 1rem; font-weight: 600; color: #1a1a1a; }
+.divider { border: none; border-top: 2px solid #f0f0f0; margin: 24px 0; }
+.total-row { background: #1a1a1a; color: white; padding: 16px 24px; border-radius: 8px; }
+.status-badge-invoice { padding: 6px 18px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; }
+.status-confirmed { background: #d4edda; color: #155724; }
+.status-pending   { background: #fff3cd; color: #856404; }
+.status-completed { background: #e2e3e5; color: #383d41; }
+.status-cancelled { background: #f8d7da; color: #721c24; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="py-5" style="margin-top:70px; background:#f5f5f5; min-height:100vh;">
+<div class="container">
+
+    <!-- Action Buttons -->
+    <div class="d-flex gap-3 mb-4 no-print">
+        <a href="{% url 'bookings:detail' pk=booking.pk %}" class="btn btn-outline-dark">
+            <i class="bi bi-arrow-left me-1"></i>Back to Booking
+        </a>
+        <button onclick="window.print()" class="btn btn-danger">
+            <i class="bi bi-printer me-2"></i>Print Invoice
+        </button>
+    </div>
+
+    <div class="invoice-wrapper">
+
+        <!-- Header -->
+        <div class="invoice-header">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+                <div>
+                    <div class="brand">Drive<span>Ease</span></div>
+                    <div class="color:#cccccc;" class="small">Newasa, Ahmednagar District, Maharashtra – 414603</div>
+                    <div class="color:#cccccc;" class="small">support@driveease.com &nbsp;|&nbsp; +91 9876543210</div>
+                </div>
+                <div class="text-end">
+                    <div style="font-size:2rem; font-weight:800; color:#dc3545;">INVOICE</div>
+                    <div class="color:#cccccc;" class="small">#DE-{{ booking.pk|stringformat:"04d" }}</div>
+                    <div class="mt-2">
+                        <span class="status-badge-invoice status-{{ booking.status }}">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="invoice-body">
+
+            <!-- Bill To & Booking Info -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="invoice-label">Bill To</div>
+                    <div class="invoice-value">{{ booking.user.get_full_name|default:booking.user.username }}</div>
+                    <div class="text-muted small">{{ booking.user.email }}</div>
+                    {% if booking.user.phone_number %}
+                    <div class="text-muted small">{{ booking.user.phone_number }}</div>
+                    {% endif %}
+                    {% if booking.user.city %}
+                    <div class="text-muted small">{{ booking.user.city }}{% if booking.user.state %}, {{ booking.user.state }}{% endif %}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="invoice-label">Invoice Date</div>
+                    <div class="invoice-value mb-2">{{ booking.created_at|date:"d F Y" }}</div>
+                    <div class="invoice-label">Booking Reference</div>
+                    <div class="invoice-value">#{{ booking.pk }}</div>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Car Details -->
+            <h6 class="fw-bold text-danger mb-3"><i class="bi bi-car-front me-2"></i>Vehicle Details</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-md-8">
+                    <div class="p-3 bg-light rounded">
+                        <div class="fw-bold fs-5">{{ booking.car.brand }} {{ booking.car.name }}</div>
+                        <div class="text-muted small mt-1">
+                            {{ booking.car.model_year }} &bull;
+                            {{ booking.car.get_category_display }} &bull;
+                            {{ booking.car.get_fuel_type_display }} &bull;
+                            {{ booking.car.get_transmission_display }} &bull;
+                            {{ booking.car.seating_capacity }} Seats
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    {% if booking.car.image %}
+                    <img src="{{ booking.car.image.url }}" class="rounded w-100" style="height:80px;object-fit:cover;" alt="{{ booking.car.name }}">
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Rental Period -->
+            <h6 class="fw-bold text-danger mb-3"><i class="bi bi-calendar3 me-2"></i>Rental Period</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="invoice-label">Pickup Date</div>
+                    <div class="invoice-value">{{ booking.pickup_date|date:"d M Y" }}</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="invoice-label">Return Date</div>
+                    <div class="invoice-value">{{ booking.return_date|date:"d M Y" }}</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="invoice-label">Duration</div>
+                    <div class="invoice-value">{{ booking.total_days }} Day{{ booking.total_days|pluralize }}</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="invoice-label">Pickup Location</div>
+                    <div class="invoice-value" style="font-size:0.9rem;">{{ booking.pickup_location }}</div>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Cost Breakdown -->
+            <h6 class="fw-bold text-danger mb-3"><i class="bi bi-receipt me-2"></i>Cost Breakdown</h6>
+            <table class="table table-borderless mb-3">
+                <thead style="background:#f8f9fa;">
+                    <tr>
+                        <th class="ps-3">Description</th>
+                        <th class="text-center">Days</th>
+                        <th class="text-center">Rate / Day</th>
+                        <th class="text-end pe-3">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ps-3">{{ booking.car.brand }} {{ booking.car.name }} Rental</td>
+                        <td class="text-center">{{ booking.total_days }}</td>
+                        <td class="text-center">₹{{ booking.price_per_day }}</td>
+                        <td class="text-end pe-3 fw-medium">₹{{ booking.total_cost|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <td class="ps-3 text-muted small">Insurance & Service charges</td>
+                        <td></td><td></td>
+                        <td class="text-end pe-3 text-muted small">Included</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="total-row d-flex justify-content-between align-items-center">
+                <span class="fs-5 fw-bold">Total Amount</span>
+                <span class="fs-3 fw-bold text-danger">₹{{ booking.total_cost|floatformat:2 }}</span>
+            </div>
+
+            {% if booking.special_requests %}
+            <div class="mt-4 p-3 bg-light rounded">
+                <div class="invoice-label">Special Requests</div>
+                <div class="text-muted small mt-1">{{ booking.special_requests }}</div>
+            </div>
+            {% endif %}
+
+            <hr class="divider">
+            <div class="text-center text-muted small">
+                <p class="mb-1">Thank you for choosing <strong>DriveEase</strong>!</p>
+                <p class="mb-0">For support: support@driveease.com &nbsp;|&nbsp; +91 9876543210</p>
+                <p class="mt-2 text-muted" style="font-size:0.75rem;">This is a computer-generated invoice. No signature required.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block title %}Booking Management - DriveEase Admin{% endblock %}
+{% block page_title %}Booking Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h5 class="fw-bold mb-0">All Bookings ({{ total_count }})</h5>
+    <a href="{% url 'dashboard:export_bookings_csv' %}" class="btn btn-sm btn-success">
+        <i class="bi bi-download me-1"></i>Export CSV
+    </a>
+</div>
+
+<!-- Search & Filter Bar -->
+<form method="GET" class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-medium mb-1">Search by user or car</label>
+                <input type="text" name="q" value="{{ search_query }}" class="form-control form-control-sm"
+                       placeholder="Name, username, car brand...">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-medium mb-1">Status</label>
+                <select name="status" class="form-select form-select-sm">
+                    <option value="">All</option>
+                    {% for val, label in status_choices %}
+                    <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-medium mb-1">From Date</label>
+                <input type="date" name="date_from" value="{{ date_from }}" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-medium mb-1">To Date</label>
+                <input type="date" name="date_to" value="{{ date_to }}" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-danger btn-sm w-100">
+                    <i class="bi bi-search me-1"></i>Filter
+                </button>
+                <a href="{% url 'dashboard:bookings' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-x"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="admin-chart-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Car</th>
+                    <th>Pickup</th>
+                    <th>Return</th>
+                    <th>Days</th>
+                    <th>Total (₹)</th>
+                    <th>Status</th>
+                    <th>Change Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td class="small fw-bold">#{{ booking.pk }}</td>
+                    <td class="small">
+                        <div class="fw-medium">{{ booking.user.get_full_name|default:booking.user.username }}</div>
+                        <div class="text-muted" style="font-size:11px;">{{ booking.user.email }}</div>
+                    </td>
+                    <td class="small">
+                        <div class="fw-medium">{{ booking.car.brand }} {{ booking.car.name }}</div>
+                        <div class="text-muted" style="font-size:11px;">{{ booking.car.get_category_display }}</div>
+                    </td>
+                    <td class="small">{{ booking.pickup_date }}</td>
+                    <td class="small">{{ booking.return_date }}</td>
+                    <td class="small">{{ booking.total_days }}</td>
+                    <td class="small fw-bold text-danger">₹{{ booking.total_cost|floatformat:0 }}</td>
+                    <td>
+                        <span class="badge {{ booking.get_status_badge_class }}">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <!-- Inline Status Update Form -->
+                        <form method="POST" action="{% url 'dashboard:booking_update' pk=booking.pk %}"
+                              class="d-flex gap-1 align-items-center">
+                            {% csrf_token %}
+                            <select name="status" class="form-select form-select-sm" style="width:auto;">
+                                {% for val, label in status_choices %}
+                                <option value="{{ val }}" {% if booking.status == val %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-danger" title="Update">
+                                <i class="bi bi-check-lg"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center py-4 text-muted">
+                        <i class="bi bi-calendar-x fs-2 d-block mb-2"></i>
+                        No bookings found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

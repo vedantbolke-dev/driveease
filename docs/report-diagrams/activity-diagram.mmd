@@ -1,0 +1,27 @@
+flowchart TD
+    A([Start]) --> B[Open car listing]
+    B --> C[Apply filters and select car]
+    C --> D[View car details]
+    D --> E{User logged in}
+
+    E -- No --> F[Login]
+    F --> G[Open booking form]
+    E -- Yes --> G[Open booking form]
+
+    G --> H[Enter pickup date return date and locations]
+    H --> I[Submit booking form]
+    I --> J{Car available}
+
+    J -- No --> K[Show unavailable message]
+    K --> Z([End])
+
+    J -- Yes --> L{Dates valid and no overlapping booking}
+    L -- No --> M[Show validation error]
+    M --> H
+
+    L -- Yes --> N[Create booking]
+    N --> O[Calculate total days and total cost]
+    O --> P[Set booking status to pending]
+    P --> Q[Mark car unavailable]
+    Q --> R[Display booking detail]
+    R --> Z([End])

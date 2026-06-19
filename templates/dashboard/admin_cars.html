@@ -1,0 +1,99 @@
+{% extends 'dashboard/admin_base.html' %}
+
+{% block title %}Car Management - DriveEase Admin{% endblock %}
+{% block page_title %}Car Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0">All Cars ({{ cars.count }})</h5>
+    <a href="{% url 'dashboard:car_add' %}" class="btn btn-danger">
+        <i class="bi bi-plus-circle me-1"></i>Add New Car
+    </a>
+</div>
+
+<div class="admin-chart-card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Image</th>
+                    <th>Car Name</th>
+                    <th>Category</th>
+                    <th>Fuel</th>
+                    <th>Seats</th>
+                    <th>Price/Day</th>
+                    <th>Status</th>
+                    <th>Featured</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for car in cars %}
+                <tr>
+                    <td class="small">{{ car.pk }}</td>
+                    <td>
+                        {% if car.image %}
+                        <img src="{{ car.image.url }}" class="rounded" style="width:55px;height:40px;object-fit:cover;">
+                        {% else %}
+                        <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                             style="width:55px;height:40px;">
+                            <i class="bi bi-car-front text-muted"></i>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="fw-medium small">{{ car.brand }} {{ car.name }}</div>
+                        <div class="text-muted" style="font-size:11px;">{{ car.model_year }}</div>
+                    </td>
+                    <td>
+                        <span class="badge bg-secondary">{{ car.get_category_display }}</span>
+                    </td>
+                    <td class="small">{{ car.get_fuel_type_display }}</td>
+                    <td class="small">{{ car.seating_capacity }}</td>
+                    <td class="fw-bold small text-danger">₹{{ car.price_per_day }}</td>
+                    <td>
+                        {% if car.is_available %}
+                        <span class="badge bg-success">Available</span>
+                        {% else %}
+                        <span class="badge bg-danger">Unavailable</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if car.is_featured %}
+                        <i class="bi bi-star-fill text-warning"></i>
+                        {% else %}
+                        <i class="bi bi-star text-muted"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a href="{% url 'cars:detail' pk=car.pk %}"
+                               class="btn btn-sm btn-outline-secondary" title="View" target="_blank">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'dashboard:car_edit' pk=car.pk %}"
+                               class="btn btn-sm btn-outline-dark" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'dashboard:car_delete' pk=car.pk %}"
+                               class="btn btn-sm btn-outline-danger" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" class="text-center py-4 text-muted">
+                        <i class="bi bi-car-front fs-2 d-block mb-2"></i>
+                        No cars added yet.
+                        <a href="{% url 'dashboard:car_add' %}" class="text-danger">Add your first car.</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Booking #{{ booking.pk }} - DriveEase{% endblock %}
+{% block main_class %}{% endblock %}
+
+{% block content %}
+<div style="margin-top:70px;">
+<div class="page-header-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-danger">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'users:dashboard' %}" class="text-danger">Dashboard</a></li>
+                <li class="breadcrumb-item active">Booking #{{ booking.pk }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Status Banner -->
+            {% if booking.status == 'pending' %}
+            <div class="alert alert-warning d-flex align-items-center gap-3 mb-4">
+                <i class="bi bi-clock-history fs-3"></i>
+                <div>
+                    <strong>Booking Pending!</strong>
+                    Your booking is awaiting admin approval. We'll update you soon.
+                </div>
+            </div>
+            {% elif booking.status == 'confirmed' %}
+            <div class="alert alert-success d-flex align-items-center gap-3 mb-4">
+                <i class="bi bi-check-circle-fill fs-3"></i>
+                <div>
+                    <strong>Booking Confirmed!</strong>
+                    Your car rental has been approved. Enjoy your ride!
+                </div>
+            </div>
+            {% elif booking.status == 'completed' %}
+            <div class="alert alert-secondary d-flex align-items-center gap-3 mb-4">
+                <i class="bi bi-flag-fill fs-3"></i>
+                <div>
+                    <strong>Rental Completed!</strong>
+                    This rental has been completed. Thank you for choosing DriveEase.
+                </div>
+            </div>
+            {% elif booking.status == 'cancelled' %}
+            <div class="alert alert-danger d-flex align-items-center gap-3 mb-4">
+                <i class="bi bi-x-circle-fill fs-3"></i>
+                <div>
+                    <strong>Booking Cancelled!</strong>
+                    This booking has been cancelled.
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Booking Details Card -->
+            <div class="booking-detail-card">
+                <div class="booking-detail-header">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <h4 class="fw-bold mb-0">
+                            <i class="bi bi-receipt text-danger me-2"></i>
+                            Booking #{{ booking.pk }}
+                        </h4>
+                        <span class="badge {{ booking.get_status_badge_class }} fs-6 px-3 py-2">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </div>
+                    <p class="text-muted small mt-1 mb-0">
+                        Booked on {{ booking.created_at|date:"d F Y, h:i A" }}
+                    </p>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <!-- Car Info -->
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-danger mb-3">Car Details</h6>
+                        <div class="d-flex gap-3">
+                            {% if booking.car.image %}
+                            <img src="{{ booking.car.image.url }}" class="rounded"
+                                 style="width:80px;height:60px;object-fit:cover;" alt="{{ booking.car.name }}">
+                            {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                 style="width:80px;height:60px;">
+                                <i class="bi bi-car-front text-muted fs-3"></i>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="fw-bold mb-1">{{ booking.car.brand }} {{ booking.car.name }}</h6>
+                                <p class="text-muted small mb-1">{{ booking.car.model_year }} &bull; {{ booking.car.get_category_display }}</p>
+                                <p class="text-muted small mb-0">{{ booking.car.get_fuel_type_display }} &bull; {{ booking.car.get_transmission_display }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Booking Info -->
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-danger mb-3">Rental Period</h6>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td class="text-muted small">Pickup Date:</td>
+                                <td class="fw-medium small">{{ booking.pickup_date }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted small">Return Date:</td>
+                                <td class="fw-medium small">{{ booking.return_date }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted small">Total Days:</td>
+                                <td class="fw-medium small">{{ booking.total_days }} day{{ booking.total_days|pluralize }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted small">Pickup Location:</td>
+                                <td class="fw-medium small">{{ booking.pickup_location }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Cost Breakdown -->
+                    <div class="col-12">
+                        <hr>
+                        <h6 class="fw-bold text-danger mb-3">Cost Breakdown</h6>
+                        <div class="cost-breakdown">
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Price Per Day:</span>
+                                <span class="fw-medium">₹{{ booking.price_per_day }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Number of Days:</span>
+                                <span class="fw-medium">{{ booking.total_days }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 fw-bold fs-5">
+                                <span>Total Amount:</span>
+                                <span class="text-danger">₹{{ booking.total_cost|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if booking.special_requests %}
+                    <div class="col-12">
+                        <h6 class="fw-bold text-danger mb-2">Special Requests</h6>
+                        <p class="text-muted small">{{ booking.special_requests }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if booking.admin_notes %}
+                    <div class="col-12">
+                        <h6 class="fw-bold text-danger mb-2">Admin Notes</h6>
+                        <p class="text-muted small">{{ booking.admin_notes }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex gap-3 mt-4 flex-wrap">
+                <a href="{% url 'users:dashboard' %}" class="btn btn-outline-dark">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+                </a>
+                <a href="{% url 'bookings:invoice' pk=booking.pk %}" class="btn btn-outline-secondary" target="_blank">
+                    <i class="bi bi-printer me-1"></i>Print Invoice
+                </a>
+                {% if booking.can_cancel %}
+                <a href="{% url 'bookings:cancel' pk=booking.pk %}" class="btn btn-outline-danger">
+                    <i class="bi bi-x-circle me-1"></i>Cancel Booking
+                </a>
+                {% endif %}
+                {% if booking.status == 'completed' and not has_review %}
+                <a href="{% url 'bookings:review' pk=booking.pk %}" class="btn btn-warning fw-bold">
+                    <i class="bi bi-star me-1"></i>Leave a Review
+                </a>
+                {% endif %}
+                {% if booking.status == 'completed' and has_review %}
+                <span class="btn btn-success disabled">
+                    <i class="bi bi-star-fill me-1"></i>Reviewed ✓
+                </span>
+                {% endif %}
+                <a href="{% url 'cars:list' %}" class="btn btn-danger">
+                    <i class="bi bi-car-front me-1"></i>Browse More Cars
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

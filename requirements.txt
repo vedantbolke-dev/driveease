@@ -1,0 +1,7 @@
+# Latest Stable Stack (March 2026)
+Django>=5.2          # Use 5.2 (LTS) for maximum stability during your project
+mysqlclient>=2.2.8   # Faster database performance
+Pillow>=12.1.1       # Essential for handling car/student images
+python-decouple>=3.8 # For keeping your DB credentials secret
+django-crispy-forms>=2.6
+crispy-bootstrap5>=2026.3

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DriveEase - Users Report</title>
+<style>
+    body { font-family: Arial, sans-serif; font-size: 12px; color: #333; margin: 0; padding: 20px; }
+    .header { background: #1a1a1a; color: white; padding: 20px 24px; border-radius: 8px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { margin: 0; font-size: 1.8rem; }
+    .header span { color: #dc3545; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #1a1a1a; color: white; padding: 10px 8px; text-align: left; font-size: 11px; }
+    td { padding: 9px 8px; border-bottom: 1px solid #f0f0f0; font-size: 11px; }
+    tr:nth-child(even) { background: #fafafa; }
+    .badge-active  { background:#d4edda; color:#155724; padding:3px 8px; border-radius:50px; font-size:10px; }
+    .badge-blocked { background:#f8d7da; color:#721c24; padding:3px 8px; border-radius:50px; font-size:10px; }
+    .footer { margin-top:24px; text-align:center; font-size:10px; color:#aaa; border-top:1px solid #eee; padding-top:12px; }
+</style>
+</head>
+<body>
+
+{% if print_mode %}
+<div style="background:#1a1a1a;padding:12px 24px;margin:-20px -20px 20px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="color:white;font-weight:600;">DriveEase — Users Report</span>
+    <button onclick="window.print()" style="background:#dc3545;color:white;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-weight:600;">🖨 Print / Save as PDF</button>
+</div>
+{% endif %}
+
+<div class="header">
+    <div>
+        <h1>Drive<span>Ease</span></h1>
+        <div style="color:#aaa;font-size:12px;margin-top:4px;">Registered Users Report</div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:#aaa;">
+        Generated: {% now "d M Y, h:i A" %}<br>
+        Total Users: {{ users|length }}
+    </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>City</th>
+            <th>Bookings</th>
+            <th>Joined</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><strong>{{ u.get_full_name|default:"—" }}</strong></td>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.phone_number|default:"—" }}</td>
+            <td>{{ u.city|default:"—" }}</td>
+            <td><strong>{{ u.bookings.count }}</strong></td>
+            <td>{{ u.date_joined|date:"d M Y" }}</td>
+            <td>
+                {% if u.is_blocked %}
+                <span class="badge-blocked">Blocked</span>
+                {% else %}
+                <span class="badge-active">Active</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="footer">
+    DriveEase Car Rental System &mdash; Newasa, Maharashtra &mdash; support@driveease.com
+</div>
+</body>
+</html>

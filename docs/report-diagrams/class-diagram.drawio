@@ -1,0 +1,79 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.6 Chrome/144.0.7559.236 Electron/40.8.4 Safari/537.36" version="29.6.6">
+  <diagram id="class-page" name="Class Diagram">
+    <mxGraphModel dx="1737" dy="2173" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1850" pageHeight="1050" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="800" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=1;fontSize=22;labelBackgroundColor=none;" value="DriveEase Car Rental System&#xa;Class Diagram" vertex="1">
+          <mxGeometry height="70" width="400" x="650" y="-130" as="geometry" />
+        </mxCell>
+        <mxCell id="824" parent="1" style="shape=umlClass;whiteSpace=wrap;html=1;fontSize=15;labelBackgroundColor=none;" value="AbstractUser" vertex="1">
+          <mxGeometry height="70" width="180" x="162.5" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="801" parent="1" style="shape=umlClass;whiteSpace=wrap;html=1;fontSize=15;labelBackgroundColor=none;" value="CustomUser&#xa;--------------------&#xa;+ username&#xa;+ first_name&#xa;+ last_name&#xa;+ email&#xa;+ phone_number&#xa;+ address&#xa;+ city&#xa;+ state&#xa;+ pincode&#xa;+ profile_picture&#xa;+ driving_license&#xa;+ is_blocked&#xa;+ created_at&#xa;+ updated_at&#xa;--------------------&#xa;+ __str__()&#xa;+ get_active_bookings_count()" vertex="1">
+          <mxGeometry height="390" width="285" x="110" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="802" parent="1" style="shape=umlClass;whiteSpace=wrap;html=1;fontSize=15;labelBackgroundColor=none;" value="Car&#xa;--------------------&#xa;+ name&#xa;+ brand&#xa;+ model_year&#xa;+ category&#xa;+ fuel_type&#xa;+ transmission&#xa;+ seating_capacity&#xa;+ mileage&#xa;+ engine_cc&#xa;+ color&#xa;+ price_per_day&#xa;+ description&#xa;+ features&#xa;+ image&#xa;+ is_available&#xa;+ is_featured&#xa;+ location&#xa;+ created_at&#xa;+ updated_at&#xa;--------------------&#xa;+ __str__()&#xa;+ get_features_list()" vertex="1">
+          <mxGeometry height="450" width="305" x="500" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="803" parent="1" style="shape=umlClass;whiteSpace=wrap;html=1;fontSize=15;labelBackgroundColor=none;" value="Booking&#xa;--------------------&#xa;+ user&#xa;+ car&#xa;+ pickup_date&#xa;+ return_date&#xa;+ pickup_location&#xa;+ drop_location&#xa;+ total_days&#xa;+ price_per_day&#xa;+ total_cost&#xa;+ status&#xa;+ special_requests&#xa;+ admin_notes&#xa;+ created_at&#xa;+ updated_at&#xa;--------------------&#xa;+ __str__()&#xa;+ save()&#xa;+ can_cancel()&#xa;+ get_status_badge_class()" vertex="1">
+          <mxGeometry height="400" width="315" x="495" y="-30" as="geometry" />
+        </mxCell>
+        <mxCell id="804" parent="1" style="shape=umlClass;whiteSpace=wrap;html=1;fontSize=15;labelBackgroundColor=none;" value="Review&#xa;--------------------&#xa;+ booking&#xa;+ user&#xa;+ car&#xa;+ rating&#xa;+ comment&#xa;+ created_at&#xa;--------------------&#xa;+ __str__()" vertex="1">
+          <mxGeometry height="220" width="245" x="1040" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="805" parent="1" style="shape=umlClass;whiteSpace=wrap;html=1;fontSize=15;labelBackgroundColor=none;" value="ContactMessage&#xa;--------------------&#xa;+ name&#xa;+ email&#xa;+ phone&#xa;+ subject&#xa;+ message&#xa;+ is_read&#xa;+ created_at&#xa;--------------------&#xa;+ __str__()" vertex="1">
+          <mxGeometry height="230" width="245" x="1330" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="827" edge="1" parent="1" source="801" style="endArrow=block;endFill=0;html=1;strokeWidth=2;labelBackgroundColor=none;fontColor=default;" target="824">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="813" edge="1" parent="1" source="801" style="endArrow=none;html=1;strokeWidth=2;labelBackgroundColor=none;fontColor=default;" target="803">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="814" edge="1" parent="1" source="802" style="endArrow=none;html=1;strokeWidth=2;labelBackgroundColor=none;fontColor=default;" target="803">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="815" edge="1" parent="1" source="803" style="endArrow=none;html=1;strokeWidth=2;labelBackgroundColor=none;fontColor=default;" target="804">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="825" edge="1" parent="1" source="801" style="endArrow=none;html=1;strokeWidth=2;labelBackgroundColor=none;fontColor=default;" target="804">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="826" edge="1" parent="1" source="802" style="endArrow=none;html=1;strokeWidth=2;labelBackgroundColor=none;fontColor=default;" target="804">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="828" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="410" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="829" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="0..*" vertex="1">
+          <mxGeometry height="30" width="50" x="470" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="830" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="820" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="831" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="0..*" vertex="1">
+          <mxGeometry height="30" width="50" x="825" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="832" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="930" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="833" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="0..1" vertex="1">
+          <mxGeometry height="30" width="50" x="1010" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="835" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="400" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="836" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="0..*" vertex="1">
+          <mxGeometry height="30" width="50" x="1010" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="837" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="1" vertex="1">
+          <mxGeometry height="30" width="30" x="820" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="838" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;fontStyle=1;labelBackgroundColor=none;" value="0..*" vertex="1">
+          <mxGeometry height="30" width="50" x="1010" y="500" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About Us - DriveEase Car Rental System{% endblock %}
+
+{% block extra_css %}
+<style>
+.about-hero{background:linear-gradient(135deg,#1a1a1a 0%,#2d0a0a 60%,#1a1a1a 100%);padding:80px 0 60px;margin-top:70px;}
+.stat-box{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:24px;text-align:center;}
+.stat-box .num{font-size:2.2rem;font-weight:800;color:#dc3545;}
+.stat-box .lbl{color:#aaa;font-size:0.85rem;margin-top:4px;}
+.dev-card{border-radius:24px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.12);border:none;transition:transform 0.3s;}
+.dev-card:hover{transform:translateY(-8px);}
+.dev-card-top{background:linear-gradient(135deg,#1a1a1a,#3d0a0a);padding:40px 24px 28px;text-align:center;}
+.dev-avatar{width:100px;height:100px;border-radius:50%;background:rgba(220,53,69,0.2);border:3px solid #dc3545;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:2.5rem;font-weight:800;color:#dc3545;}
+.dev-name{color:white;font-size:1.2rem;font-weight:700;margin:0;}
+.dev-role{color:#dc3545;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;}
+.dev-card-body{background:white;padding:24px;}
+.dev-info-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:0.88rem;color:#555;}
+.dev-info-row:last-of-type{border-bottom:none;}
+.tech-tag{background:#f8f9fa;border:1px solid #e9ecef;border-radius:50px;padding:4px 14px;font-size:0.78rem;color:#444;font-weight:500;display:inline-block;margin:3px;}
+.guide-card{background:linear-gradient(135deg,#1a1a1a,#2d0a0a);border-radius:20px;padding:40px;text-align:center;color:white;}
+.tech-card{background:white;border-radius:16px;padding:20px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,0.07);transition:transform 0.2s;}
+.tech-card:hover{transform:translateY(-4px);}
+.tech-card .ticon{font-size:2.5rem;margin-bottom:8px;}
+.tech-card .tname{font-weight:700;font-size:0.9rem;color:#1a1a1a;}
+.tech-card .tdesc{font-size:0.75rem;color:#888;}
+.feat-item{background:white;border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,0.06);display:flex;align-items:center;gap:14px;}
+.feat-dot{width:10px;height:10px;background:#dc3545;border-radius:50%;flex-shrink:0;}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-hero">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="badge bg-danger px-3 py-2 mb-3 fs-6">🎓 B.Sc. Final Year Project — 2025–2026</span>
+                <h1 style="font-size:3rem;font-weight:800;color:white;">About <span class="text-danger">DriveEase</span></h1>
+                <p style="color:#ccc;font-size:1rem;line-height:1.9;margin-top:16px;">
+                    DriveEase is a fully functional car rental management system developed as a final year project for
+                    <strong style="color:white;">B.Sc. Computer Science</strong> at
+                    <strong style="color:white;">Shri Dnyaneshwar Mahavidyalaya, Newasa</strong>.
+                    It demonstrates real-world web development using Python, Django, MySQL and Bootstrap 5.
+                </p>
+                <div class="d-flex gap-3 mt-4 flex-wrap">
+                    <a href="{% url 'cars:list' %}" class="btn btn-danger px-4 fw-bold"><i class="bi bi-car-front me-2"></i>Browse Cars</a>
+                    <a href="#developers" class="btn px-4 fw-bold" style="border:2px solid rgba(255,255,255,0.3);color:white;"><i class="bi bi-people me-2"></i>Meet the Team</a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="row g-3">
+                    <div class="col-6"><div class="stat-box"><div class="num">9+</div><div class="lbl">Cars in Fleet</div></div></div>
+                    <div class="col-6"><div class="stat-box"><div class="num">4</div><div class="lbl">Categories</div></div></div>
+                    <div class="col-6"><div class="stat-box"><div class="num">₹999</div><div class="lbl">Starting/Day</div></div></div>
+                    <div class="col-6"><div class="stat-box"><div class="num">24/7</div><div class="lbl">Online Booking</div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mission Vision Values -->
+<section class="section-padding bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">What Drives Us</span>
+            <h2 class="section-title mt-2">Our <span class="text-danger">Purpose</span></h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div style="background:white;border-radius:20px;padding:32px;height:100%;box-shadow:0 4px 20px rgba(0,0,0,0.07);border-top:4px solid #dc3545;">
+                    <div style="width:56px;height:56px;background:#dc3545;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;"><i class="bi bi-bullseye text-white fs-4"></i></div>
+                    <h5 class="fw-bold">Our Mission</h5>
+                    <p class="text-muted" style="font-size:0.92rem;">To provide a seamless, affordable, and reliable car rental experience to residents and visitors of Newasa through modern digital technology.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div style="background:#1a1a1a;border-radius:20px;padding:32px;height:100%;box-shadow:0 4px 20px rgba(0,0,0,0.15);">
+                    <div style="width:56px;height:56px;background:#dc3545;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;"><i class="bi bi-eye-fill text-white fs-4"></i></div>
+                    <h5 class="fw-bold text-white">Our Vision</h5>
+                    <p style="color:#aaa;font-size:0.92rem;">To become the most trusted digital car rental platform in Ahmednagar district, powered by student innovation and technology.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div style="background:white;border-radius:20px;padding:32px;height:100%;box-shadow:0 4px 20px rgba(0,0,0,0.07);border-top:4px solid #dc3545;">
+                    <div style="width:56px;height:56px;background:#dc3545;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;"><i class="bi bi-stars text-white fs-4"></i></div>
+                    <h5 class="fw-bold">Our Values</h5>
+                    <p class="text-muted" style="font-size:0.92rem;">Transparency, affordability, customer satisfaction and continuous improvement are the core values that drive DriveEase forward.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Info -->
+<section class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">Academic Project</span>
+            <h2 class="section-title mt-2">Project <span class="text-danger">Information</span></h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div style="background:#f8f9fa;border-radius:20px;padding:36px;">
+                    <div class="row g-4 text-center">
+                        <div class="col-md-3 col-6">
+                            <i class="bi bi-mortarboard-fill text-danger fs-1 mb-2"></i>
+                            <div style="font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:1px;">Course</div>
+                            <div class="fw-bold mt-1">B.Sc. Computer Science</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <i class="bi bi-building text-danger fs-1 mb-2"></i>
+                            <div style="font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:1px;">College</div>
+                            <div class="fw-bold mt-1">Shri Dnyaneshwar Mahavidyalaya, Newasa</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <i class="bi bi-calendar-check text-danger fs-1 mb-2"></i>
+                            <div style="font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:1px;">Academic Year</div>
+                            <div class="fw-bold mt-1">2025 – 2026</div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <i class="bi bi-person-check text-danger fs-1 mb-2"></i>
+                            <div style="font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:1px;">Project Guide</div>
+                            <div class="fw-bold mt-1">Prof. Jagtap S. G</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Developers -->
+<section class="section-padding bg-light" id="developers">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge">The Team</span>
+            <h2 class="section-title mt-2">Project <span class="text-danger">Developers</span></h2>
+            <p class="text-muted">Built with dedication by B.Sc. CS students of Shri Dnyaneshwar Mahavidyalaya, Newasa</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="dev-card">
+                    <div class="dev-card-top">
+                        <div class="dev-avatar">VB</div>
+                        <h5 class="dev-name">Vedant Rajendra Bolke</h5>
+                        <div class="dev-role mt-2">Full Stack Developer</div>
+                    </div>
+                    <div class="dev-card-body">
+                        <div class="dev-info-row"><i class="bi bi-book text-danger"></i> B.Sc. Computer Science</div>
+                        <div class="dev-info-row"><i class="bi bi-building text-danger"></i> Shri Dnyaneshwar Mahavidyalaya, Newasa</div>
+                        <div class="dev-info-row"><i class="bi bi-calendar text-danger"></i> Academic Year: 2025–2026</div>
+                        <div class="dev-info-row"><i class="bi bi-code-slash text-danger"></i> Backend & Database Development</div>
+                        <div class="mt-3">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Django</span>
+                            <span class="tech-tag">MySQL</span>
+                            <span class="tech-tag">Bootstrap</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="dev-card">
+                    <div class="dev-card-top">
+                        <div class="dev-avatar">VH</div>
+                        <h5 class="dev-name">Vishal Rajendra Hapse</h5>
+                        <div class="dev-role mt-2">Full Stack Developer</div>
+                    </div>
+                    <div class="dev-card-body">
+                        <div class="dev-info-row"><i class="bi bi-book text-danger"></i> B.Sc. Computer Science</div>
+                        <div class="dev-info-row"><i class="bi bi-building text-danger"></i> Shri Dnyaneshwar Mahavidyalaya, Newasa</div>
+                        <div class="dev-info-row"><i class="bi bi-calendar text-danger"></i> Academic Year: 2025–2026</div>
+                        <div class="dev-info-row"><i class="bi bi-palette text-danger"></i> Frontend & UI/UX Development</div>
+                        <div class="mt-3">
+                            <span class="tech-tag">HTML/CSS</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">Django</span>
+                            <span class="tech-tag">UI/UX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guide -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-5">
+                <div class="guide-card">
+                    <div style="width:80px;height:80px;background:rgba(220,53,69,0.2);border-radius:50%;border:2px solid #dc3545;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+                        <i class="bi bi-person-badge-fill text-danger" style="font-size:2rem;"></i>
+                    </div>
+                    <div style="color:#888;font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;">Project Guide</div>
+                    <h4 class="text-danger fw-bold mt-2 mb-1">Prof. Jagtap S. G</h4>
+                    <p style="color:#aaa;font-size:0.9rem;margin:0;">Department of Computer Science</p>
+                    <p style="color:#aaa;font-size:0.9rem;">Shri Dnyaneshwar Mahavidyalaya, Newasa</p>
+                    <div style="background:rgba(220,53,69,0.1);border:1px solid rgba(220,53,69,0.3);border-radius:10px;padding:14px 20px;margin-top:12px;color:#ccc;font-size:0.85rem;line-height:1.6;">
+                        <i class="bi bi-quote text-danger me-2"></i>
+                        Under the guidance of Prof. Jagtap S. G, this project was designed, developed and successfully completed by the students.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tech Stack -->
+<section class="section-padding" style="background:#1a1a1a;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold text-white">Technologies <span class="text-danger">Used</span></h3>
+            <p style="color:#aaa;">Modern web technologies powering DriveEase</p>
+        </div>
+        <div class="row g-3 justify-content-center">
+            <div class="col-lg-2 col-md-3 col-4"><div class="tech-card"><div class="ticon">🐍</div><div class="tname">Python</div><div class="tdesc">3.x</div></div></div>
+            <div class="col-lg-2 col-md-3 col-4"><div class="tech-card"><div class="ticon">🎸</div><div class="tname">Django</div><div class="tdesc">4.2</div></div></div>
+            <div class="col-lg-2 col-md-3 col-4"><div class="tech-card"><div class="ticon">🗄️</div><div class="tname">MySQL</div><div class="tdesc">8.0</div></div></div>
+            <div class="col-lg-2 col-md-3 col-4"><div class="tech-card"><div class="ticon">🅱️</div><div class="tname">Bootstrap</div><div class="tdesc">5.3</div></div></div>
+            <div class="col-lg-2 col-md-3 col-4"><div class="tech-card"><div class="ticon">📊</div><div class="tname">Chart.js</div><div class="tdesc">4.4</div></div></div>
+            <div class="col-lg-2 col-md-3 col-4"><div class="tech-card"><div class="ticon">⚡</div><div class="tname">JavaScript</div><div class="tdesc">ES6+</div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="section-padding">
+    <div class="container">
+        <div class="row g-5 align-items-start">
+            <div class="col-lg-5">
+                <span class="section-badge">What We Built</span>
+                <h2 class="section-title mt-2">Key <span class="text-danger">Features</span></h2>
+                <p class="text-muted mt-3">DriveEase covers all aspects of a real car rental business — from user registration to admin analytics.</p>
+                <a href="{% url 'cars:list' %}" class="btn btn-danger mt-3 px-4 fw-bold"><i class="bi bi-car-front me-2"></i>Try It Now</a>
+            </div>
+            <div class="col-lg-7">
+                {% for feat in features %}
+                <div class="feat-item">
+                    <div class="feat-dot"></div>
+                    <div>
+                        <div class="fw-bold" style="font-size:0.95rem;">{{ feat.title }}</div>
+                        <div class="text-muted small">{{ feat.desc }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

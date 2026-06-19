@@ -1,0 +1,37 @@
+sequenceDiagram
+    actor Customer
+    participant UI as Browser UI
+    participant View as Booking View
+    participant Form as BookingForm
+    participant Car as Car Model
+    participant Booking as Booking Model
+    participant DB as MySQL Database
+
+    Customer->>UI: Select car and open booking page
+    UI->>View: GET booking page
+    View->>Car: Fetch selected car
+    Car->>DB: Read car data
+    DB-->>Car: Car record
+    Car-->>View: Car object
+    View-->>UI: Render booking form
+
+    Customer->>UI: Submit booking details
+    UI->>View: POST booking data
+    View->>Form: Validate input
+    Form->>DB: Check overlapping bookings
+    DB-->>Form: Validation result
+
+    alt Invalid dates or overlap exists
+        Form-->>View: Error
+        View-->>UI: Show validation message
+    else Valid booking
+        Form-->>View: Cleaned data
+        View->>Booking: Create booking
+        Booking->>Booking: Calculate days and cost
+        Booking->>DB: Save booking
+        DB-->>Booking: Booking saved
+        View->>Car: Update availability
+        Car->>DB: Set is_available false
+        DB-->>Car: Car updated
+        View-->>UI: Show booking confirmation
+    end

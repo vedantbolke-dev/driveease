@@ -1,0 +1,78 @@
+erDiagram
+    CUSTOM_USER ||--o{ BOOKING : places
+    CAR ||--o{ BOOKING : booked_in
+    BOOKING ||--o| REVIEW : has
+    CUSTOM_USER ||--o{ REVIEW : writes
+    CAR ||--o{ REVIEW : receives
+
+    CUSTOM_USER {
+        int id PK
+        string username
+        string first_name
+        string last_name
+        string email
+        string phone_number
+        string city
+        string state
+        string pincode
+        string driving_license
+        boolean is_blocked
+        datetime created_at
+        datetime updated_at
+    }
+
+    CAR {
+        int id PK
+        string name
+        string brand
+        int model_year
+        string category
+        string fuel_type
+        string transmission
+        int seating_capacity
+        decimal price_per_day
+        boolean is_available
+        boolean is_featured
+        string location
+        datetime created_at
+        datetime updated_at
+    }
+
+    BOOKING {
+        int id PK
+        int user_id FK
+        int car_id FK
+        date pickup_date
+        date return_date
+        string pickup_location
+        string drop_location
+        int total_days
+        decimal price_per_day
+        decimal total_cost
+        string status
+        text special_requests
+        text admin_notes
+        datetime created_at
+        datetime updated_at
+    }
+
+    REVIEW {
+        int id PK
+        int booking_id FK
+        int user_id FK
+        int car_id FK
+        int rating
+        text comment
+        datetime created_at
+    }
+
+    CONTACT_MESSAGE {
+        int id PK
+        string name
+        string email
+        string phone
+        string subject
+        text message
+        boolean is_read
+        datetime created_at
+    }

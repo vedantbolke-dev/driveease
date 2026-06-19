@@ -1,0 +1,374 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}DriveEase - Affordable Car Rentals in Newasa, Maharashtra{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-center text-lg-start">
+                <span class="badge bg-danger mb-3 px-3 py-2 fs-6 mt-2">
+                    Newasa's Trusted Car Rental Service
+                </span>
+                <h1 class="hero-title">
+                    Rent the Perfect Car<br>
+                    <span class="text-danger">For Every Journey</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Explore our wide range of well-maintained cars at affordable prices.
+                    SUVs, Sedans, Hatchbacks &amp; Luxury &mdash; all starting at just ₹999/day.
+                </p>
+
+                <div class="hero-search-box mt-4">
+                    <form action="{% url 'cars:list' %}" method="GET">
+                        <div class="d-flex gap-2 flex-wrap mb-2">
+                            <input type="text" name="query" class="form-control hero-search-input"
+                                   placeholder="Search car (e.g. Swift, Creta, BMW)...">
+                            <select name="category" class="form-select hero-search-select">
+                                <option value="">All Categories</option>
+                                <option value="hatchback">Hatchback</option>
+                                <option value="sedan">Sedan</option>
+                                <option value="suv">SUV</option>
+                                <option value="luxury">Luxury</option>
+                            </select>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap align-items-end">
+                            <div class="hero-date-col">
+                                <div class="hero-date-card" onclick="openDatePicker('pickup_date')">
+                                    <div class="hero-date-label">
+                                        <i class="bi bi-calendar3 me-1"></i> Pickup Date
+                                    </div>
+                                    <div class="hero-date-row">
+                                        <span id="pickup_label" class="hero-date-value">Select date</span>
+                                        <i class="bi bi-chevron-down hero-date-chevron"></i>
+                                    </div>
+                                    <input type="date" id="pickup_date" name="pickup_date" class="hero-date-input"
+                                           onchange="document.getElementById('pickup_label').textContent=this.value ? new Date(this.value).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) : 'Select date'; document.getElementById('pickup_label').style.color=this.value?'white':'rgba(255,255,255,0.5)';">
+                                </div>
+                            </div>
+
+                            <div class="hero-date-col">
+                                <div class="hero-date-card" onclick="openDatePicker('return_date')">
+                                    <div class="hero-date-label">
+                                        <i class="bi bi-calendar-check me-1"></i> Return Date
+                                    </div>
+                                    <div class="hero-date-row">
+                                        <span id="return_label" class="hero-date-value">Select date</span>
+                                        <i class="bi bi-chevron-down hero-date-chevron"></i>
+                                    </div>
+                                    <input type="date" id="return_date" name="return_date" class="hero-date-input"
+                                           onchange="document.getElementById('return_label').textContent=this.value ? new Date(this.value).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) : 'Select date'; document.getElementById('return_label').style.color=this.value?'white':'rgba(255,255,255,0.5)';">
+                                </div>
+                            </div>
+
+                            <div class="hero-search-submit-wrap">
+                                <button type="submit" class="btn btn-danger fw-bold hero-search-btn">
+                                    <i class="bi bi-search me-2"></i>Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="hero-stats mt-5">
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">{{ total_cars }}+</span>
+                        <span class="hero-stat-label">Cars Available</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">{{ suv_count }}+</span>
+                        <span class="hero-stat-label">SUV Models</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">{{ luxury_count }}+</span>
+                        <span class="hero-stat-label">Luxury Cars</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">24/7</span>
+                        <span class="hero-stat-label">Support</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="hero-visual-wrap">
+                    <div class="hero-visual-circle">
+                        <i class="bi bi-car-front-fill hero-visual-icon"></i>
+                        <div class="hero-float-badge hero-float-badge-insured">
+                            <i class="bi bi-shield-fill text-danger me-1"></i> Fully Insured
+                        </div>
+                        <div class="hero-float-badge hero-float-badge-price">
+                            <i class="bi bi-currency-rupee text-danger me-1"></i> From ₹999/day
+                        </div>
+                        <div class="hero-float-badge hero-float-badge-rated">
+                            <i class="bi bi-star-fill text-warning me-1"></i> Top Rated
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-scroll-indicator">
+        <a href="#categories"><i class="bi bi-chevron-double-down"></i></a>
+    </div>
+</section>
+
+<section id="categories" class="section-padding categories-section">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge">Browse by Category</span>
+            <h2 class="section-title">Find Your <span class="text-danger">Perfect Ride</span></h2>
+            <p class="section-subtitle text-muted">Whatever the journey &mdash; we have the right car for you</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'cars:list' %}?category=hatchback" class="text-decoration-none">
+                    <div class="category-showcase-card">
+                        <div class="category-showcase-top category-showcase-top-hatchback">
+                            <div class="category-showcase-icon-wrap category-showcase-icon-wrap-light">
+                                <i class="bi bi-car-front category-showcase-icon"></i>
+                            </div>
+                            <h5 class="category-showcase-title">Hatchback</h5>
+                        </div>
+                        <div class="category-showcase-bottom">
+                            <p class="category-showcase-desc">Compact &amp; fuel-efficient for city drives</p>
+                            <span class="category-showcase-link category-showcase-link-hatchback">Explore &rarr;</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'cars:list' %}?category=sedan" class="text-decoration-none">
+                    <div class="category-showcase-card">
+                        <div class="category-showcase-top category-showcase-top-sedan">
+                            <div class="category-showcase-icon-wrap category-showcase-icon-wrap-light">
+                                <i class="bi bi-car-front-fill category-showcase-icon"></i>
+                            </div>
+                            <h5 class="category-showcase-title">Sedan</h5>
+                        </div>
+                        <div class="category-showcase-bottom">
+                            <p class="category-showcase-desc">Comfortable rides for long journeys</p>
+                            <span class="category-showcase-link category-showcase-link-sedan">Explore &rarr;</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'cars:list' %}?category=suv" class="text-decoration-none">
+                    <div class="category-showcase-card category-showcase-card-featured">
+                        <div class="category-showcase-top category-showcase-top-suv">
+                            <span class="category-showcase-popular">Popular</span>
+                            <div class="category-showcase-icon-wrap category-showcase-icon-wrap-light">
+                                <i class="bi bi-truck-front-fill category-showcase-icon"></i>
+                            </div>
+                            <h5 class="category-showcase-title">SUV</h5>
+                        </div>
+                        <div class="category-showcase-bottom">
+                            <p class="category-showcase-desc">Powerful SUVs for any terrain</p>
+                            <span class="category-showcase-link category-showcase-link-suv">Explore &rarr;</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'cars:list' %}?category=luxury" class="text-decoration-none">
+                    <div class="category-showcase-card">
+                        <div class="category-showcase-top category-showcase-top-luxury">
+                            <div class="category-showcase-icon-wrap category-showcase-icon-wrap-dark">
+                                <i class="bi bi-gem category-showcase-icon category-showcase-icon-gold"></i>
+                            </div>
+                            <h5 class="category-showcase-title">Luxury</h5>
+                        </div>
+                        <div class="category-showcase-bottom">
+                            <p class="category-showcase-desc">Premium cars for special occasions</p>
+                            <span class="category-showcase-link category-showcase-link-luxury">Explore &rarr;</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding featured-cars-section">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge section-badge-red">Top Picks</span>
+            <h2 class="section-title mt-3">Featured <span class="text-danger">Cars</span></h2>
+            <p class="section-subtitle text-muted">Hand-picked popular cars loved by our customers</p>
+        </div>
+
+        {% if featured_cars %}
+        <div class="row g-4">
+            {% for car in featured_cars %}
+            <div class="col-lg-4 col-md-6">
+                <div class="car-card h-100">
+                    <div class="car-card-img-wrap">
+                        {% if car.image %}
+                            <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.name }}" class="car-card-img">
+                        {% else %}
+                            <div class="car-card-placeholder">
+                                <i class="bi bi-car-front-fill"></i>
+                                <span>{{ car.brand }}</span>
+                            </div>
+                        {% endif %}
+                        <div class="car-card-badge">
+                            <span class="badge bg-danger">{{ car.get_category_display }}</span>
+                        </div>
+                        {% if not car.is_available %}
+                        <div class="car-unavailable-overlay">
+                            <span>Currently Unavailable</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="car-card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h5 class="car-card-title mb-0">{{ car.brand }} {{ car.name }}</h5>
+                                <small class="text-muted">{{ car.model_year }} &bull; {{ car.get_fuel_type_display }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="car-price">₹{{ car.price_per_day }}</span>
+                                <small class="d-block text-muted">/day</small>
+                            </div>
+                        </div>
+
+                        <div class="car-specs">
+                            <span class="car-spec-item"><i class="bi bi-people-fill"></i> {{ car.seating_capacity }} Seats</span>
+                            <span class="car-spec-item"><i class="bi bi-gear-fill"></i> {{ car.get_transmission_display }}</span>
+                            {% if car.mileage %}
+                            <span class="car-spec-item"><i class="bi bi-speedometer2"></i> {{ car.mileage }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="car-card-actions mt-3">
+                            <a href="{% url 'cars:detail' pk=car.pk %}" class="btn btn-outline-dark btn-sm"><i class="bi bi-eye me-1"></i>View Details</a>
+                            {% if car.is_available %}
+                            <a href="{% url 'bookings:create' car_id=car.pk %}" class="btn btn-danger btn-sm"><i class="bi bi-calendar-check me-1"></i>Book Now</a>
+                            {% else %}
+                            <button class="btn btn-secondary btn-sm" disabled>Unavailable</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'cars:list' %}" class="btn btn-outline-danger btn-lg px-5">
+                <i class="bi bi-grid me-2"></i>View All Cars
+            </a>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-car-front text-muted featured-empty-icon"></i>
+            <h4 class="mt-3 text-muted">No cars available right now.</h4>
+            <p class="text-muted">Please check back soon!</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section-padding bg-dark text-white">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge-light">Our Benefits</span>
+            <h2 class="section-title text-white">Why Choose <span class="text-danger">DriveEase?</span></h2>
+        </div>
+
+        <div class="row g-4 text-center">
+            <div class="col-lg-3 col-md-6"><div class="why-card"><div class="why-icon"><i class="bi bi-patch-check-fill"></i></div><h5 class="text-white fw-bold">Fully Insured</h5><p class="small why-card-text">All our cars come with comprehensive insurance coverage.</p></div></div>
+            <div class="col-lg-3 col-md-6"><div class="why-card"><div class="why-icon"><i class="bi bi-currency-rupee"></i></div><h5 class="text-white fw-bold">Best Prices</h5><p class="small why-card-text">Competitive rental rates starting from just ₹999/day.</p></div></div>
+            <div class="col-lg-3 col-md-6"><div class="why-card"><div class="why-icon"><i class="bi bi-tools"></i></div><h5 class="text-white fw-bold">Well Maintained</h5><p class="small why-card-text">Every car is regularly serviced and thoroughly cleaned.</p></div></div>
+            <div class="col-lg-3 col-md-6"><div class="why-card"><div class="why-icon"><i class="bi bi-headset"></i></div><h5 class="text-white fw-bold">24/7 Support</h5><p class="small why-card-text">Our customer support is available around the clock.</p></div></div>
+        </div>
+    </div>
+</section>
+
+{% if latest_reviews %}
+<section class="section-padding reviews-section">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <span class="section-badge section-badge-gold">Reviews</span>
+            <h2 class="section-title mt-3">What Our <span class="text-danger">Customers Say</span></h2>
+            <p class="section-subtitle text-muted">Real reviews from real customers</p>
+        </div>
+        <div class="row g-4">
+            {% for review in latest_reviews %}
+            <div class="col-md-4">
+                <div class="review-card">
+                    <div class="text-warning mb-3 review-stars">
+                        {% for i in "12345" %}{% if forloop.counter <= review.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}
+                    </div>
+                    {% if review.comment %}<p class="review-comment">&ldquo;{{ review.comment|truncatechars:120 }}&rdquo;</p>{% endif %}
+                    <div class="d-flex align-items-center gap-3 mt-auto">
+                        <div class="review-avatar">{{ review.user.first_name|first|upper }}</div>
+                        <div>
+                            <div class="fw-bold small">{{ review.user.get_full_name|default:review.user.username }}</div>
+                            <div class="text-muted review-car-name">{{ review.car.brand }} {{ review.car.name }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="cta-section section-padding">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7 text-white">
+                <span class="badge bg-danger px-3 py-2 mb-3 fs-6"><i class="bi bi-lightning-fill me-1"></i> Limited Time Offer</span>
+                <h2 class="fw-bold mb-3 cta-title">Ready to Hit the Road?<br><span class="text-danger">Book Your Car Today!</span></h2>
+                <p class="mb-4 fs-5 cta-text">Browse our wide range of cars and book your ride in just a few clicks. Simple, fast, and affordable car rental in Newasa starting at ₹999/day.</p>
+                <div class="d-flex flex-wrap gap-3 mb-4">
+                    <span class="cta-pill"><i class="bi bi-check-circle-fill text-danger me-2"></i>No Hidden Charges</span>
+                    <span class="cta-pill"><i class="bi bi-check-circle-fill text-danger me-2"></i>Instant Confirmation</span>
+                    <span class="cta-pill"><i class="bi bi-check-circle-fill text-danger me-2"></i>Free Cancellation</span>
+                </div>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'cars:list' %}" class="btn btn-danger btn-lg px-5 fw-bold"><i class="bi bi-car-front me-2"></i>Browse Cars</a>
+                    {% if not user.is_authenticated %}
+                    <a href="{% url 'users:register' %}" class="btn btn-lg px-5 fw-bold cta-outline-btn"><i class="bi bi-person-plus me-2"></i>Register Free</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="row g-3">
+                    <div class="col-6"><div class="cta-stat-card cta-stat-card-dim"><div class="cta-stat-value">{{ total_cars }}+</div><div class="cta-stat-label">Cars Available</div></div></div>
+                    <div class="col-6"><div class="cta-stat-card cta-stat-card-red"><div class="cta-stat-value">₹999</div><div class="cta-stat-label">Starting Per Day</div></div></div>
+                    <div class="col-6"><div class="cta-stat-card cta-stat-card-red"><div class="cta-stat-value">24/7</div><div class="cta-stat-label">Customer Support</div></div></div>
+                    <div class="col-6"><div class="cta-stat-card cta-stat-card-dim"><div class="cta-stat-value">100%</div><div class="cta-stat-label">Insured Cars</div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openDatePicker(inputId) {
+    const field = document.getElementById(inputId);
+    if (!field) return;
+    if (typeof field.showPicker === 'function') {
+        field.showPicker();
+        return;
+    }
+    field.focus();
+    field.click();
+}
+</script>
+{% endblock %}

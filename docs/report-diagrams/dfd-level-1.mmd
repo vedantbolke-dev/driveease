@@ -1,0 +1,44 @@
+flowchart TB
+    Customer[Customer]
+    Admin[Admin]
+
+    P1([1.0 User Management])
+    P2([2.0 Car Search and View])
+    P3([3.0 Booking Processing])
+    P4([4.0 Review and Contact Handling])
+    P5([5.0 Admin Dashboard and Reports])
+
+    D1[(D1 Users)]
+    D2[(D2 Cars)]
+    D3[(D3 Bookings)]
+    D4[(D4 Reviews)]
+    D5[(D5 Contact Messages)]
+
+    Customer -->|register login profile data| P1
+    P1 -->|account result profile details| Customer
+
+    Customer -->|search filters and view request| P2
+    P2 -->|car list and car details| Customer
+
+    Customer -->|booking request cancel request| P3
+    P3 -->|booking details invoice status| Customer
+
+    Customer -->|review and contact message| P4
+    P4 -->|acknowledgement| Customer
+
+    Admin -->|manage system data and reports| P5
+    P5 -->|dashboard and export output| Admin
+
+    P1 <--> D1
+    P2 <--> D2
+    P2 -->|availability check| D3
+    P3 <--> D3
+    P3 -->|customer record| D1
+    P3 -->|car status update| D2
+    P4 -->|booking reference| D3
+    P4 <--> D4
+    P4 <--> D5
+    P5 --> D1
+    P5 --> D2
+    P5 --> D3
+    P5 --> D5

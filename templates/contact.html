@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - DriveEase Car Rental System{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header-section">
+    <div class="container">
+        <h1 class="page-header-title">Contact Us</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-danger">Home</a></li>
+                <li class="breadcrumb-item active">Contact</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="section-padding">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Contact Info -->
+            <div class="col-lg-4">
+                <h3 class="fw-bold mb-4">Get In <span class="text-danger">Touch</span></h3>
+                <p class="text-muted mb-4">
+                    Have questions about our car rental services? We're here to help.
+                    Reach out to us through any of the following channels.
+                </p>
+
+                <!-- Contact Cards -->
+                <div class="contact-info-card mb-3">
+                    <div class="contact-info-icon bg-danger">
+                        <i class="bi bi-geo-alt-fill text-white"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold">Our Location</h6>
+                        <p class="text-muted small mb-0">Newasa, Ahmednagar District</p>
+                        <p class="text-muted small mb-0">Maharashtra - 414603, India</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-card mb-3">
+                    <div class="contact-info-icon bg-dark">
+                        <i class="bi bi-telephone-fill text-white"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold">Phone Number</h6>
+                        <a href="tel:+919876543210" class="text-danger text-decoration-none">+91 9876543210</a>
+                        <p class="text-muted small mb-0">Mon - Sat, 9:00 AM - 6:00 PM</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-card mb-3">
+                    <div class="contact-info-icon bg-danger">
+                        <i class="bi bi-envelope-fill text-white"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 fw-bold">Email Address</h6>
+                        <a href="mailto:support@driveease.com" class="text-danger text-decoration-none">
+                            support@driveease.com
+                        </a>
+                        <p class="text-muted small mb-0">We reply within 24 hours</p>
+                    </div>
+                </div>
+
+                <!-- Social Links -->
+                <div class="mt-4">
+                    <h6 class="fw-bold mb-3">Follow Us</h6>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-8">
+                <div class="contact-form-card">
+                    <h4 class="fw-bold mb-4">Send Us a <span class="text-danger">Message</span></h4>
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Your Name <span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control"
+                                       placeholder="Enter your full name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Email Address <span class="text-danger">*</span></label>
+                                <input type="email" name="email" class="form-control"
+                                       placeholder="Enter your email" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Phone Number</label>
+                                <input type="tel" name="phone" class="form-control"
+                                       placeholder="+91 XXXXX XXXXX">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-medium">Subject</label>
+                                <select name="subject" class="form-select">
+                                    <option value="">-- Select Subject --</option>
+                                    <option value="booking">Booking Inquiry</option>
+                                    <option value="pricing">Pricing Information</option>
+                                    <option value="cancellation">Booking Cancellation</option>
+                                    <option value="complaint">Complaint</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-medium">Message <span class="text-danger">*</span></label>
+                                <textarea name="message" class="form-control" rows="5"
+                                          placeholder="Write your message here..." required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-danger px-5 py-2">
+                                    <i class="bi bi-send me-2"></i>Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section (placeholder) -->
+<section class="pb-5">
+    <div class="container">
+        <div class="map-placeholder">
+            <i class="bi bi-map text-danger fs-1 mb-3"></i>
+            <h5 class="text-muted">Newasa, Ahmednagar, Maharashtra</h5>
+            <p class="text-muted small">
+                Visit us at our office in Newasa for walk-in bookings and car viewing.
+            </p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

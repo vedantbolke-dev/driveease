@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Dashboard - DriveEase{% endblock %}
+{% block main_class %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-page py-5" style="margin-top:56px;">
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div>
+                <h3 class="fw-bold mb-1">
+                    👋 Hello, {{ user.first_name|default:user.username }}!
+                </h3>
+                <p class="text-muted mb-0 small">
+                    Welcome to your DriveEase dashboard. Manage your bookings here.
+                </p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'users:profile' %}" class="btn btn-outline-dark btn-sm">
+                    <i class="bi bi-person-gear me-1"></i>Edit Profile
+                </a>
+                <a href="{% url 'cars:list' %}" class="btn btn-danger btn-sm">
+                    <i class="bi bi-car-front me-1"></i>Browse Cars
+                </a>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="user-stat-card">
+                    <div class="user-stat-icon bg-danger"><i class="bi bi-calendar-check text-white"></i></div>
+                    <div class="user-stat-value">{{ bookings_count }}</div>
+                    <div class="user-stat-label">Total Bookings</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="user-stat-card">
+                    <div class="user-stat-icon bg-warning"><i class="bi bi-clock-history text-white"></i></div>
+                    <div class="user-stat-value">{{ active_bookings.count }}</div>
+                    <div class="user-stat-label">Active Rentals</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="user-stat-card">
+                    <div class="user-stat-icon bg-success"><i class="bi bi-check-circle text-white"></i></div>
+                    <div class="user-stat-value">{{ completed_bookings.count }}</div>
+                    <div class="user-stat-label">Completed</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="user-stat-card">
+                    <div class="user-stat-icon bg-dark"><i class="bi bi-currency-rupee text-white"></i></div>
+                    <div class="user-stat-value">₹{{ total_spent|floatformat:0 }}</div>
+                    <div class="user-stat-label">Total Spent</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Bookings -->
+        {% if active_bookings %}
+        <div class="dashboard-section mb-4">
+            <h5 class="dashboard-section-title">
+                <i class="bi bi-clock-history text-danger me-2"></i>Active Rentals
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#ID</th>
+                            <th>Car</th>
+                            <th>Pickup</th>
+                            <th>Return</th>
+                            <th>Days</th>
+                            <th>Total (₹)</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in active_bookings %}
+                        <tr>
+                            <td><strong>#{{ booking.pk }}</strong></td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if booking.car.image %}
+                                    <img src="{{ booking.car.image.url }}" class="rounded" width="45" height="35"
+                                         style="object-fit:cover;">
+                                    {% else %}
+                                    <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                         style="width:45px;height:35px;">
+                                        <i class="bi bi-car-front text-muted"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <div class="fw-medium small">{{ booking.car.brand }} {{ booking.car.name }}</div>
+                                        <div class="text-muted" style="font-size:11px;">{{ booking.car.get_category_display }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="small">{{ booking.pickup_date }}</td>
+                            <td class="small">{{ booking.return_date }}</td>
+                            <td class="small">{{ booking.total_days }}</td>
+                            <td class="fw-bold small">₹{{ booking.total_cost|floatformat:0 }}</td>
+                            <td>
+                                <span class="badge {{ booking.get_status_badge_class }}">
+                                    {{ booking.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a href="{% url 'bookings:detail' pk=booking.pk %}"
+                                       class="btn btn-outline-dark btn-sm" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    {% if booking.can_cancel %}
+                                    <a href="{% url 'bookings:cancel' pk=booking.pk %}"
+                                       class="btn btn-outline-danger btn-sm" title="Cancel">
+                                        <i class="bi bi-x-circle"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Booking History -->
+        <div class="dashboard-section">
+            <h5 class="dashboard-section-title">
+                <i class="bi bi-clock text-danger me-2"></i>Booking History
+            </h5>
+            {% if all_bookings %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#ID</th>
+                            <th>Car</th>
+                            <th>Pickup Date</th>
+                            <th>Return Date</th>
+                            <th>Total (₹)</th>
+                            <th>Status</th>
+                            <th>Booked On</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in all_bookings %}
+                        <tr>
+                            <td><strong>#{{ booking.pk }}</strong></td>
+                            <td class="small fw-medium">
+                                {{ booking.car.brand }} {{ booking.car.name }}
+                            </td>
+                            <td class="small">{{ booking.pickup_date }}</td>
+                            <td class="small">{{ booking.return_date }}</td>
+                            <td class="fw-bold small">₹{{ booking.total_cost|floatformat:0 }}</td>
+                            <td>
+                                <span class="badge {{ booking.get_status_badge_class }}">
+                                    {{ booking.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="small text-muted">{{ booking.created_at|date:"d M Y" }}</td>
+                            <td>
+                                <a href="{% url 'bookings:detail' pk=booking.pk %}"
+                                   class="btn btn-sm btn-outline-dark">
+                                    <i class="bi bi-eye me-1"></i>View
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-calendar-x text-muted" style="font-size:3rem;"></i>
+                <h5 class="mt-3 text-muted">No bookings yet</h5>
+                <p class="text-muted small">Browse our cars and make your first booking!</p>
+                <a href="{% url 'cars:list' %}" class="btn btn-danger mt-2">
+                    <i class="bi bi-car-front me-2"></i>Browse Cars
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
