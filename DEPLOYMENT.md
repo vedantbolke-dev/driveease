@@ -129,4 +129,4 @@ This guide provides step-by-step instructions to deploy the **DriveEase Car Rent
 3. Log in to the Admin Panel:
    * **URL**: `https://yourusername.pythonanywhere.com/dashboard/`
    * **Username**: `admin`
-   * **Password**: `admin123`
+   * **Password**: `Admin@1234`

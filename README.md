@@ -144,7 +144,7 @@ pip install -r requirements.txt
 
 # Setup database (Create database 'driveease_db' in MySQL first)
 python manage.py migrate
-python manage.py seed_data   # Creates 9 sample cars + admin account (admin / admin123)
+python manage.py seed_data   # Creates 9 sample cars + admin account (admin / Admin@1234)
 
 # Run development server
 python manage.py runserver   # Visit http://127.0.0.1:8000
