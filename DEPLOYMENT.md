@@ -1,55 +1,39 @@
-# 🌐 Deploying DriveEase to PythonAnywhere
+# 🌐 Deploying DriveEase to PythonAnywhere (Free Plan)
 
-This guide provides step-by-step instructions to deploy the **DriveEase Car Rental Management System** onto [PythonAnywhere](https://www.pythonanywhere.com/) (free tier).
-
----
-
-## 📋 Prerequisites
-
-1. A **PythonAnywhere Account** (Free / Beginner tier works perfectly).
-2. Your GitHub repository URL: `https://github.com/vedantbolke-dev/driveease.git`
+This guide provides step-by-step instructions to deploy the **DriveEase Car Rental Management System** onto [PythonAnywhere](https://www.pythonanywhere.com/) using the completely free Beginner tier.
 
 ---
 
 ## 🛠️ Step-by-Step Deployment Guide
 
-### Step 1: Create a MySQL Database on PythonAnywhere
+### Step 1: Clone the Project and Set Up the Virtual Environment
 
 1. Log in to your [PythonAnywhere Dashboard](https://www.pythonanywhere.com/user-dashboard/).
-2. Go to the **Databases** tab.
-3. Under **MySQL database engine password**, set a password and write it down.
-4. Under **Create a database**, type `driveease_db` and click **Create**.
-   * *Note: Your database name will be prefixed with your username (e.g., `yourusername$driveease_db`).*
-
----
-
-### Step 2: Clone the Project and Set Up the Virtual Environment
-
-1. Go to the **Consoles** tab and start a new **Bash Console**.
-2. Clone your repository:
+2. Go to the **Consoles** tab and start a new **Bash Console**.
+3. Clone your repository:
    ```bash
    git clone https://github.com/vedantbolke-dev/driveease.git
    cd driveease
    ```
-3. Create a virtual environment:
+4. Create a virtual environment:
    ```bash
    python -m venv venv
    source venv/bin/activate
    ```
-4. Install all dependencies:
+5. Install all dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
 ---
 
-### Step 3: Create the Environment File (`.env`)
+### Step 2: Create the Environment File (`.env`)
 
 1. While inside the `driveease/` directory in the Bash Console, run:
    ```bash
    nano .env
    ```
-2. Paste the following configuration (replace `YOUR_USERNAME` and `YOUR_DATABASE_PASSWORD` with your actual PythonAnywhere credentials):
+2. Paste the following configuration (replace `YOUR_USERNAME` with your actual PythonAnywhere username):
    ```env
    # Security Key (Keep this secret)
    SECRET_KEY=f_vlg2ucm=yoys22wy0*a0x6o6ucu4+24s8dmba9kfjjhfl)55
@@ -57,20 +41,16 @@ This guide provides step-by-step instructions to deploy the **DriveEase Car Rent
    # Production Safety
    DEBUG=False
 
-   # Database Settings (PythonAnywhere MySQL)
-   DB_NAME=YOUR_USERNAME$driveease_db
-   DB_USER=YOUR_USERNAME
-   DB_PASSWORD=YOUR_DATABASE_PASSWORD
-   DB_HOST=YOUR_USERNAME.mysql.pythonanywhere-services.com
-   DB_PORT=3306
+   # Database Settings (Using free SQLite database for free tier)
+   USE_SQLITE=True
    ```
 3. Press `CTRL+O`, then `Enter` to save, and `CTRL+X` to exit nano.
 
 ---
 
-### Step 4: Run Migrations and Prepare Data
+### Step 3: Run Migrations and Prepare Data
 
-1. Run the database migrations to set up the MySQL tables:
+1. Run the database migrations to set up the SQLite database:
    ```bash
    python manage.py migrate
    ```
@@ -85,7 +65,7 @@ This guide provides step-by-step instructions to deploy the **DriveEase Car Rent
 
 ---
 
-### Step 5: Configure the Web App
+### Step 4: Configure the Web App
 
 1. Go back to your PythonAnywhere Dashboard and click the **Web** tab.
 2. Click **Add a new web app**.
@@ -102,7 +82,7 @@ This guide provides step-by-step instructions to deploy the **DriveEase Car Rent
 
 ---
 
-### Step 6: Edit the WSGI Configuration File
+### Step 5: Edit the WSGI Configuration File
 
 1. On the **Web** tab under **Code**, click the link next to **WSGI configuration file**.
 2. Delete everything in the editor and paste the following:
@@ -122,12 +102,12 @@ This guide provides step-by-step instructions to deploy the **DriveEase Car Rent
    from django.core.wsgi import get_wsgi_application
    application = get_wsgi_application()
    ```
-3. Replace `YOUR_USERNAME` with your actual PythonAnywhere username.
+3. Replace `YOUR_USERNAME` with your actual PythonAnywhere username (e.g. `vedantbolke123`).
 4. Click **Save** in the top right.
 
 ---
 
-### Step 7: Configure Static & Media Paths
+### Step 6: Configure Static & Media Paths
 
 1. Go back to the **Web** tab.
 2. Scroll down to the **Static files** section.
@@ -138,11 +118,11 @@ This guide provides step-by-step instructions to deploy the **DriveEase Car Rent
 | `/static/` | `/home/YOUR_USERNAME/driveease/staticfiles` |
 | `/media/` | `/home/YOUR_USERNAME/driveease/media` |
 
-*(Replace `YOUR_USERNAME` with your actual username).*
+*(Replace `YOUR_USERNAME` with your actual username, e.g. `vedantbolke123`).*
 
 ---
 
-### Step 8: Reload and Test!
+### Step 7: Reload and Test!
 
 1. Scroll to the top of the **Web** tab and click **Reload yourwebpage.pythonanywhere.com**.
 2. Visit `https://yourusername.pythonanywhere.com` in your browser.
