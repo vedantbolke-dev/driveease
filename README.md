@@ -3,6 +3,9 @@
 A full-stack web application for managing car rentals with role-based access, real-time booking management, and an analytics dashboard. Built with **Django**, **MySQL**, and **Bootstrap 5**.
 
 > Built by [Vedant Bolke](https://github.com/vedantbolke-dev)
+> 
+> 🌐 **Live Demo**: [vedantbolke123.pythonanywhere.com](https://VedantBolke123.pythonanywhere.com)
+> 🔑 **Demo Admin Login**: Username: `admin` | Password: `Admin@1234`
 
 ---
 
